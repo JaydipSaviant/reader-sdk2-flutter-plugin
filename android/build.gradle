@@ -1,0 +1,113 @@
+group 'com.squareup.sdk.readersdk2'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.8.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url "https://sdk.squareup.com/android"
+            credentials {
+                username SQUARE_READER_SDK_APPLICATION_ID
+                password SQUARE_READER_SDK_REPOSITORY_PASSWORD
+            }
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.squareup.sdk.readersdk2'
+    }
+
+    compileSdkVersion 33
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+    }
+
+    defaultConfig {
+        minSdkVersion 24
+    }
+
+    dependencies {
+        testImplementation 'org.jetbrains.kotlin:kotlin-test'
+        testImplementation 'org.mockito:mockito-core:5.0.0'
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+
+            testLogging {
+               events "passed", "skipped", "failed", "standardOut", "standardError"
+               outputs.upToDateWhen {false}
+               showStandardStreams = true
+            }
+        }
+    }
+}
+
+
+
+dependencies {
+//     implementation "com.squareup.sdk.reader:reader-sdk:2.0.0-alpha18"
+//    // MockReader SDK dependency
+//     implementation "com.squareup.sdk.reader:mockreader-ui:2.0.0-alpha18"
+//     implementation 'androidx.appcompat:appcompat:1.6.1'
+//     implementation 'com.google.android.material:material:1.10.0'
+//     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+//     implementation "androidx.navigation:navigation-fragment-ktx:2.7.5"
+//     implementation "androidx.preference:preference-ktx:1.2.1"
+//     implementation "androidx.navigation:navigation-ui-ktx:2.7.5"
+
+    implementation "com.squareup.sdk.reader:reader-sdk:2.0.0-alpha19"
+    implementation "com.squareup.sdk.reader:mockreader-ui:2.0.0-alpha19"
+    implementation 'junit:junit:4.12'
+    def readerSdkVersion =  '2.0.0-alpha18'
+    def playServicesBaseVersion = rootProject.hasProperty('googlePlayServiceVersion') ? rootProject.googlePlayServiceVersion : '16.0.1'
+    implementation "com.google.android.gms:play-services-base:$playServicesBaseVersion"
+   // api "com.squareup.sdk.reader:reader-sdk-$SQUARE_READER_SDK_APPLICATION_ID:$readerSdkVersion"
+    runtimeOnly "com.squareup.sdk.reader:reader-sdk-internals:$readerSdkVersion"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.navigation:navigation-fragment-ktx:2.7.5"
+    implementation "androidx.preference:preference-ktx:1.2.1"
+    implementation "androidx.navigation:navigation-ui-ktx:2.7.5"
+    testImplementation 'org.mockito:mockito-core:4.5.1'
+    androidTestImplementation 'org.mockito:mockito-android:3.11.2'
+
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+
+//    implementation 'com.github.bumptech.glide:glide:4.16.0'
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="AddReaderButton">
+    <item name="android:textSize">@dimen/reader_item_title_text_size</item>
+    <item name="android:textAllCaps">false</item>
+    <item name="android:background">@color/white</item>
+    <item name="android:textColor">@color/black_90p</item>
+    <item name="android:layout_marginStart">@dimen/reader_add_reader_margin_start</item>
+  </style>
+
+  <style name="ReaderListItemTitle">
+    <item name="android:textSize">@dimen/reader_item_title_text_size</item>
+    <item name="android:layout_height">@dimen/reader_item_title_height</item>
+    <item name="android:layout_marginStart">@dimen/reader_item_margin_start</item>
+    <item name="android:layout_marginTop">@dimen/reader_item_margin_top</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:letterSpacing">0.01</item>
+    <item name="android:textColor">@color/black_90p</item>
+  </style>
+
+  <style name="ReaderListItemState">
+    <item name="android:layout_height">@dimen/reader_item_state_height</item>
+    <item name="android:textSize">@dimen/reader_item_state_text_size</item>
+    <item name="android:letterSpacing">0.02</item>
+    <item name="android:textColor">@color/black_55p</item>
+  </style>
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+  <!-- Main view (no drawer) -->
+  <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="tip_amount" />
+
+  <TextView
+      android:id="@+id/textView2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="tip_amount" />
+
+  <include layout="@layout/keypad_view"/>
+
+  <!-- Left drawer -->
+  <include layout="@layout/payment_options_view"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>

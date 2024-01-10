@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/reader_item_height"
+    android:background="@color/white"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
+
+  <TextView
+      android:id="@+id/reader_name"
+      android:layout_width="wrap_content"
+      style="@style/ReaderListItemTitle"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:text="Magstripe"
+      />
+
+  <ImageView
+      android:id="@+id/details_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/right_caret"
+      android:layout_marginEnd="@dimen/reader_item_margin_end"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      />
+
+  <TextView
+      android:id="@+id/state"
+      android:layout_width="wrap_content"
+      style="@style/ReaderListItemState"
+      app:layout_constraintStart_toStartOf="@id/reader_name"
+      app:layout_constraintTop_toBottomOf="@+id/reader_name"
+      tools:text="Ready (85%)"
+      />
+</androidx.constraintlayout.widget.ConstraintLayout>

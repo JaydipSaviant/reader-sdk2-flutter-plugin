@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <dimen name="button_textsize">30sp</dimen>
+  <dimen name="title_textsize">30sp</dimen>
+  <dimen name="settings_textsize">24sp</dimen>
+</resources>

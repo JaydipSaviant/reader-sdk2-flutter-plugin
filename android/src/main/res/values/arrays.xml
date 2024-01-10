@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Set to `true` to enable OAuth authorization -->
+    <bool name="sqrsdk_2_environment_use_oauth">false</bool>
+
+    <!-- Environment scopes and URL. Do not modify these values. -->
+    <string-array name="sqrsdk_2_environment_scopes">
+        <item>Production</item>
+        <item>Sandbox</item>
+    </string-array>
+    <string-array name="sqrsdk_2_environment_url_base">
+        <item>https://connect.squareup.com</item>
+        <item>https://connect.squareup.com</item>
+    </string-array>
+
+    <!-- Replace following values with your Production and Sandbox configurations -->
+    <string-array name="sqrsdk_2_environment_application_id">
+        <item>sq0idp-Pr-sJRq3sev_zacgGj2H1Q</item>
+        <item>sandbox-sq0idb-7QT2EriOdn1Gz8jw7e2KSw</item>
+    </string-array>
+    <string-array name="sqrsdk_2_environment_auth_token">
+        <item>EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW</item>
+        <item>EAAAEJe7nhcIDV2cXO1edJafX0ZNFQk42lqxVZjYn1kc3Tg7lN-P32GlFey5OepV</item>
+    </string-array>
+    <string-array name="sqrsdk_2_environment_location_id">
+        <item>LBBSYN1QKHJSY</item>
+        <item>LWTCANRWNHMF0</item>
+    </string-array>
+</resources>

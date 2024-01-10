@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="ReaderDetailsActionButton" parent="SecondaryButtonBase">
+    <item name="android:layout_marginBottom">24dp</item>
+  </style>
+
+  <style name="ReadersHeader" parent="android:Widget.TextView">
+    <item name="android:textSize">@dimen/reader_details_header_text_size</item>
+    <item name="android:textColor">@color/black_55p</item>
+    <item name="android:letterSpacing">0.15</item>
+    <item name="textAllCaps">true</item>
+  </style>
+
+  <style name="ReaderDetailsLabel" parent="android:TextAppearance">
+    <item name="android:textSize">@dimen/reader_details_text_size</item>
+    <item name="android:textColor">@color/black_90p</item>
+    <item name="android:letterSpacing">0.01</item>
+    <item name="android:layout_marginTop">@dimen/reader_details_label_margin_top</item>
+  </style>
+
+  <style name="ReaderDetailsError" parent="android:TextAppearance">
+    <item name="android:textSize">@dimen/reader_details_text_size</item>
+    <item name="android:textColor">@color/red_error</item>
+    <item name="android:lineSpacingExtra">5sp</item>
+    <item name="android:letterSpacing">0.01</item>
+    <item name="android:layout_marginTop">@dimen/reader_details_margin_top</item>
+    <item name="android:layout_marginEnd">@dimen/reader_details_margin_end</item>
+  </style>
+
+  <style name="ReaderDetailsValue">
+    <item name="android:textAlignment">textEnd</item>
+    <item name="android:textColor">@color/black_55p</item>
+    <item name="android:layout_marginEnd">@dimen/reader_details_margin_end</item>
+    <item name="android:textSize">@dimen/reader_details_text_size</item>
+  </style>
+
+  <style name="ReaderDetailsDivider">
+    <item name="android:layout_marginTop">@dimen/reader_details_divider_margin_top</item>
+    <item name="android:background">@color/black_8p</item>
+  </style>
+</resources>

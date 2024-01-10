@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <Preference
+      app:key="@string/location_name_button_key"
+      app:title="@string/location_name"
+      app:iconSpaceReserved="false" />
+
+  <Preference
+      app:key="@string/location_id_button_key"
+      app:title="@string/location_id"
+      app:iconSpaceReserved="false" />
+
+  <Preference
+      app:key="@string/version_button_key"
+      app:title="@string/version"
+      app:iconSpaceReserved="false" />
+
+  <Preference
+      app:key="@string/environment_button_key"
+      app:title="@string/environment"
+      app:iconSpaceReserved="false" />
+
+  <Preference
+      app:key="@string/application_id_button_key"
+      app:title="@string/application_id"
+      app:iconSpaceReserved="false" />
+
+  <Preference
+      app:key="@string/log_out_button_key"
+      app:title="@string/log_out"
+      app:layout="@layout/setting_item"
+      app:iconSpaceReserved="false" />
+
+</PreferenceScreen>

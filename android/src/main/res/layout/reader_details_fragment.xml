@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/readerDetailsFragmentScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_3p"
+    android:paddingStart="@dimen/screen_padding"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    >
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <TextView
+        android:id="@+id/denied_message"
+        style="@style/ReaderDetailsError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Failed to connect. Your phone is not connected to WiFi."
+        />
+
+    <TextView
+        android:id="@+id/header"
+        style="@style/ReadersHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/reader_details_margin_top"
+        android:text="@string/reader_details_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/denied_message"
+        />
+
+    <TextView
+        android:id="@+id/status_label"
+        style="@style/ReaderDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/reader_details_first_label_margin_top"
+        android:text="@string/status_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        />
+
+    <TextView
+        android:id="@+id/status"
+        style="@style/ReaderDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/status_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/status_label"
+        tools:text="Ready"
+        />
+
+    <View
+        android:id="@+id/status_divider"
+        style="@style/ReaderDetailsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/reader_details_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/status_label"
+        />
+
+    <TextView
+        android:id="@+id/connection_label"
+        style="@style/ReaderDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connection_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status_divider"
+        />
+
+    <TextView
+        android:id="@+id/connection"
+        style="@style/ReaderDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/connection_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/connection_label"
+        tools:text="Bluetooth"
+        />
+
+    <View
+        android:id="@+id/connection_divider"
+        style="@style/ReaderDetailsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/reader_details_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/connection_label"
+        />
+
+    <TextView
+        android:id="@+id/accepts_label"
+        style="@style/ReaderDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/accepts_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/connection_divider"
+        />
+
+    <TextView
+        android:id="@+id/accepts"
+        style="@style/ReaderDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/accepts_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/accepts_label"
+        tools:text="Contactless, chip"
+        />
+
+    <View
+        android:id="@+id/accepts_divider"
+        style="@style/ReaderDetailsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/reader_details_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/accepts_label"
+        />
+
+    <TextView
+        android:id="@+id/battery_label"
+        style="@style/ReaderDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/battery_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/accepts_divider"
+        />
+
+    <TextView
+        android:id="@+id/battery"
+        style="@style/ReaderDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/battery_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/battery_label"
+        tools:text="78%"
+        />
+
+    <View
+        android:id="@+id/battery_divider"
+        style="@style/ReaderDetailsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/reader_details_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/battery_label"
+        />
+
+    <TextView
+        android:id="@+id/firmware_label"
+        style="@style/ReaderDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/firmware_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/battery_divider"
+        />
+
+    <TextView
+        android:id="@+id/firmware"
+        style="@style/ReaderDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/firmware_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/firmware_label"
+        tools:text="312071"
+        />
+
+    <View
+        android:id="@+id/firmware_divider"
+        style="@style/ReaderDetailsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/reader_details_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/firmware_label"
+        />
+
+    <TextView
+        android:id="@+id/serial_number_label"
+        style="@style/ReaderDetailsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/serial_number_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firmware_divider"
+        />
+
+    <TextView
+        android:id="@+id/serial_number"
+        style="@style/ReaderDetailsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/serial_number_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/serial_number_label"
+        tools:text="645LS07013000760"
+        />
+
+    <View
+        android:id="@+id/serial_number_divider"
+        style="@style/ReaderDetailsDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/reader_details_divider_height"
+        app:layout_constraintTop_toBottomOf="@+id/serial_number_label"
+        />
+
+    <include
+        layout="@layout/reader_details_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin_32dp"
+        android:layout_marginEnd="@dimen/reader_details_margin_end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/serial_number_divider"
+        />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

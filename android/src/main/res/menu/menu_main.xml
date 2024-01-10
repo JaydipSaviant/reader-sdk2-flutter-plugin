@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+      android:id="@+id/keypad_dest"
+      android:icon="@drawable/ic_dialpad"
+      android:title="@string/menu_keypad_label" />
+  <item
+      android:id="@+id/readers_dest"
+      android:icon="@drawable/ic_readers"
+      android:title="@string/menu_readers_label" />
+  <item
+      android:id="@+id/settings_dest"
+      android:icon="@drawable/ic_settings"
+      android:title="@string/menu_settings_label" />
+</menu>

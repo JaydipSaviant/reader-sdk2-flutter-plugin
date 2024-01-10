@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/keypad_dest">
+    <fragment
+        android:id="@+id/keypad_dest"
+        android:name="com.squareup.sdk.readersdk2.payment.KeypadFragment"
+        android:label="@string/keypad_label"
+        tools:layout="@layout/keypad_fragment">
+        <action
+            android:id="@+id/action_keypad_to_charge"
+            app:destination="@id/charge_dest"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_keypad_to_permission"
+            app:destination="@id/permission_dest"
+            app:popUpTo="@id/keypad_dest"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/settings_dest"
+        android:name="com.squareup.sdk.readersdk2.settings.SettingsFragment"
+        android:label="@string/settings_label">
+    </fragment>
+    <fragment
+        android:id="@+id/charge_dest"
+        android:name="com.squareup.sdk.readersdk2.payment.ChargeFragment"
+        android:label="@string/charge"
+        tools:layout="@layout/charge_fragment">
+    </fragment>
+    <dialog
+        android:id="@+id/pairing_dest"
+        android:name="com.squareup.sdk.readersdk2.readers.PairingFragment"
+        android:label="@string/add_reader"
+        tools:layout="@layout/pairing_view"/>
+    <fragment
+        android:id="@+id/readers_dest"
+        android:name="com.squareup.sdk.readersdk2.readers.ReadersFragment"
+        android:label="@string/readers_label"
+        tools:layout="@layout/readers_fragment">
+        <action
+            android:id="@+id/action_readers_to_details"
+            app:destination="@id/reader_details_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/reader_details_dest"
+        android:name="com.squareup.sdk.readersdk2.readers.ReaderDetailsFragment"
+        tools:layout="@layout/reader_details_fragment"
+         >
+        <argument
+            android:name="serial_id"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/permission_dest"
+        android:name="com.squareup.sdk.readersdk2.permission.PermissionsFragment"
+        tools:layout="@layout/permissions_fragment">
+        <action
+            android:id="@+id/action_permission_to_keypad"
+            app:destination="@id/keypad_dest"
+            app:popUpTo="@id/permission_dest"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <!-- Authorization activity is not used directly by NavController; we kept it here for reference -->
+    <activity
+        android:id="@+id/authorization_dest"
+        android:name="com.squareup.sdk.readersdk2.auth.AuthorizeActivity"
+        android:label="@string/authorize"
+        tools:layout="@layout/authorizing_activity"/>
+</navigation>

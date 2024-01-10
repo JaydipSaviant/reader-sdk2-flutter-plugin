@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="authorize_with_oauth">Authorize With OAuth</string>
+    <string name="breakdown_format" formatted="false">%1$s plus %2$s tip</string>
+    <string name="card_on_file_payment_dialog_title">Card on File Payment</string>
+    <string name="external_payment_dialog_message">Select an external payment type.</string>
+    <string name="external_payment_dialog_title">External Payment</string>
+    <string name="cash_payment_dialog_message">Enter amount of cash supplied.</string>
+    <string name="cash_payment_dialog_title">Cash Payment</string>
+    <string name="no_readers_connected">Reader not connected</string>
+    <string name="method_swipe">Swipe to pay</string>
+    <string name="method_dip">Insert to pay</string>
+    <string name="method_tap">Tap to pay</string>
+    <string name="method_dip_tap">Insert or tap to pay</string>
+    <string name="method_dip_swipe">Swipe or insert to pay</string>
+    <string name="method_dip_swipe_tap">Swipe, insert, or tap to pay</string>
+    <string name="method_swipe_tap">Swipe or tap to pay</string>
+    <string name="check_hint">Check number</string>
+    <string name="card_hint">Card number</string>
+    <string name="bank_transfer_hint">Transfer ID</string>
+    <string name="other_gift_card_hint">Gift card number</string>
+    <string name="default_hint">Source description</string>
+    <string name="fee_advice_format" formatted="false">(maximum $%.2f)</string>
+    <string name="microphone_subtitle">Some square readers use the microphone to communicate payment card data to your device.</string>
+    <string name="microphone_title">Enable Microphone</string>
+    <string name="phone_subtitle">Square readers use the phone information to identify the payment device.</string>
+    <string name="phone_title">Access phone state</string>
+    <string name="location_subtitle">Square needs to know where transactions take place to reduce risk and minimize payment disputes.</string>
+    <string name="location_title">Enable Location Services</string>
+    <string name="bluetooth_scan_subtitle">Bluetooth scan permission is used to find Square Chip and Contactless card readers.</string>
+    <string name="bluetooth_scan_title">Enable Bluetooth Scan</string>
+    <string name="bluetooth_connect_subtitle">Bluetooth connect permission is used to find Square Chip and Contactless card readers.</string>
+    <string name="bluetooth_connect_title">Enable Bluetooth Connect</string>
+    <string name="log_out_button_key">deauthorize_button_key</string>
+    <string name="version_button_key">version_button_key</string>
+    <string name="environment_button_key">environment_button_key</string>
+    <string name="application_id_button_key">application_id_button_key</string>
+    <string name="location_id_button_key">location_id_button_key</string>
+    <string name="location_name_button_key">location_name_button_key</string>
+    <string name="settings_not_available">Not available</string>
+    <string name="text_copied">Text copied to clipboard</string>
+    <string name="card_on_file_id_hint">Card on file ID</string>
+    <string name="us_dollar_symbol">$</string>
+    <string name="total">Total</string>
+    <string name="charge">Charge</string>
+    <string name="clear">C</string>
+    <string name="options_title">Additional Payment Options</string>
+    <string name="complete">Complete payment</string>
+    <string name="accept_partial_auth">Accept Partial Authorization</string>
+    <string name="tip_money_label">Tip Money:</string>
+    <string name="fee_money_label">App Fee Money:</string>
+    <string name="order_id_label">Order Id:</string>
+    <string name="customer_id_label">Customer Id:</string>
+    <string name="team_member_id_label">Team Member Id:</string>
+    <string name="location_id_label">Override Location Id:</string>
+    <string name="reference_id_label">Reference Id:</string>
+    <string name="note_label">Note:</string>
+    <string name="statement_description_label">Statement Description:</string>
+    <string name="delay_duration_label">Delay Until Cancellation (ms):</string>
+    <string name="idempotency_key_label">Idempotency Key:</string>
+    <string name="crash_now">Test Crash Behavior</string>
+    <string name="anr_now">Test ANR Behavior</string>
+    <string name="start_taking_payments">Start Taking Payments</string>
+    <string name="state_connecting">Connecting…</string>
+    <string name="state_disabled">Disabled</string>
+    <string name="state_disconnected">Disconnected</string>
+    <string name="state_failed">Failed to Connect</string>
+    <string name="state_failed_activate">Please activate your account</string>
+    <string name="state_failed_contact">Please contact customer support</string>
+    <string name="state_failed_try_again">Please try again</string>
+    <string name="state_ready">Ready</string>
+    <string name="state_updating" formatted="false">Updating (%d%%)...</string>
+    <string name="pairing_fragment_canceled_message">Canceled pairing</string>
+    <string name="pairing_fragment_failed_message" formatted="false">Failed to pair: %s</string>
+    <string name="pairing_fragment_success_message">Paired to new reader</string>
+    <string name="pairing_screen_instructions">Press and hold the button on your reader until the lights flash orange, then release the button and place the reader next to this device to pair.</string>
+    <string name="bluetooth_auth_canceled">Bluetooth bond failed because we canceled the bonding process.</string>
+    <string name="bluetooth_auth_discovery_in_progress">Bluetooth bonding failed because a discovery is in progress.</string>
+    <string name="bluetooth_auth_failed">Bluetooth bond failed because pins did not match, or remote device did not respond to pin request in time.</string>
+    <string name="bluetooth_auth_rejected">Bluetooth bond failed because the other side explicitly rejected bonding.</string>
+    <string name="bluetooth_remote_auth_canceled">Bluetooth bond failed because we received an Authentication Cancel by remote end.</string>
+    <string name="bluetooth_remote_device_down">Bluetooth bond failed because we could not contact the remote device.</string>
+    <string name="bluetooth_removed">Bluetooth bond failed because an existing bond was explicitly revoked.</string>
+    <string name="bluetooth_repeated_attempts">Bluetooth bond failed because of repeated attempts.</string>
+    <string name="bluetooth_timeout">Bluetooth bond failed because of authentication timeout.</string>
+    <string name="no_bluetooth_code">Bluetooth did not specify a reason.</string>
+    <string name="unknown_bluetooth_code" formatted="false">Bluetooth gave an unrecognized code as the reason (%d).</string>
+    <string name="unknown_disconnected">No detailed information is available.</string>
+    <string name="connection_audio_label">Audio</string>
+    <string name="connection_bluetooth_label">Bluetooth</string>
+    <string name="charging_text">Charging</string>
+    <string name="battery_percent_info_with_state" formatted="false">%1$s (%2$s %3$d%%)</string>
+    <string name="card_entry_method_chip">Chip</string>
+    <string name="card_entry_method_contactless">Contactless</string>
+    <string name="card_entry_method_swipe">Swipe</string>
+    <string name="magstripe">Magstripe Reader</string>
+    <string name="contactless_chip">Contactless &amp; Chip</string>
+    <string name="battery_percent_info" formatted="false">%1$s %2$d%%</string>
+    <string name="battery_not_plugged_in">battery</string>
+    <string name="battery_plugged_in">charging</string>
+    <string name="forget_label">Forget This Reader</string>
+    <string name="identify_label">Identify This Reader</string>
+    <string name="reader_details_header">General</string>
+    <string name="accepts_label">Accepts</string>
+    <string name="add_reader">Add Reader</string>
+    <string name="app_name">Reader SDK 2 Demo</string>
+    <string name="application_id">Application ID</string>
+    <string name="authorize">Authorize</string>
+    <string name="battery_label">Battery</string>
+    <string name="connection_label">Connection</string>
+    <string name="enter_manually">Enter card details manually</string>
+    <string name="environment">Environment</string>
+    <string name="firmware_label">Firmware</string>
+    <string name="firmware_message" formatted="false">Contactless &amp; Chip Reader is unavailable during update, now %d%% complete.</string>
+    <string name="keypad_label">Keypad</string>
+    <string name="leak_canary_display_activity_label">Leaks RSDK2 Demo</string>
+    <string name="location_id">Location ID</string>
+    <string name="location_name">Location</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="menu_keypad_label">Keypad</string>
+    <string name="menu_readers_label">Readers</string>
+    <string name="menu_settings_label">Settings</string>
+    <string name="reader_name_label">Name</string>
+    <string name="readers_label">Readers</string>
+    <string name="readers_list_header_title">Readers</string>
+    <string name="serial_number_label">Serial Number</string>
+    <string name="settings_label">Settings</string>
+    <string name="settings_no">NO</string>
+    <string name="settings_yes">YES</string>
+    <string name="status_label">Status</string>
+    <string name="tip_advice_format" formatted="false">(%1$.1f%% of $%2$.2f)</string>
+    <string name="version">SDK Version</string>
+</resources>

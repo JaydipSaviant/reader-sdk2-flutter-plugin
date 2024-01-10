@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_gravity="end"
+    android:layout_width="320dp"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+  <TextView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="@string/options_title"
+      android:background="@color/colorPrimary"
+      android:paddingStart="10dp"
+      style="@style/PaymentOptions"/>
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end"
+      android:fadeScrollbars="false"
+      android:scrollbarSize="@dimen/option_margin_end">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+      <CheckBox
+          android:id="@+id/complete"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:layout_marginTop="10dp"
+          android:buttonTint="@color/colorPrimary"
+          android:checked="true"
+          android:padding="10dp"
+          android:text="@string/complete"
+          android:textSize="@dimen/option_text_size"/>
+
+      <CheckBox
+          android:id="@+id/accept_partial_auth"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="5dp"
+          android:layout_marginTop="10dp"
+          android:buttonTint="@color/colorPrimary"
+          android:checked="true"
+          android:padding="10dp"
+          android:text="@string/accept_partial_auth"
+          android:textSize="@dimen/option_text_size"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/tip_money_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/tip_money"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="numberDecimal"
+          />
+
+      <TextView
+          android:id="@+id/tip_advice"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingStart="10dp"
+          android:text=""
+          android:textSize="@dimen/settings_textsize"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/fee_money_label"
+          style="@style/DrawerLabel"
+          />
+      <EditText
+          android:id="@+id/fee_money"
+          style="@style/PaymentOptionsEditText"
+          android:inputType="numberDecimal"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:id="@+id/fee_advice"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingStart="10dp"
+          android:text=""
+          android:textSize="@dimen/settings_textsize"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/order_id_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/order_id"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/customer_id_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/customer_id"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/team_member_id_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/team_member_id"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/location_id_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/location_id"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/reference_id_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/reference_id"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/note_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/note"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/statement_description_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/statement_description"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/delay_duration_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/delay_duration"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="numberDecimal"
+          />
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/idempotency_key_label"
+          style="@style/DrawerLabel"/>
+
+      <EditText
+          android:id="@+id/idempotency_key"
+          style="@style/PaymentOptionsEditText"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+
+      <Button
+          android:id="@+id/crash_now"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/crash_now"/>
+      <Button
+          android:id="@+id/anr_now"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/anr_now"/>
+      <!--
+       We use the same demo app for our internal testing; this gives a place to show work we are
+       testing but haven't yet released or announced.  It's always empty in the external build, sorry!
+      -->
+      <FrameLayout
+          android:id="@+id/future_feature_panel"
+          android:visibility="gone"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"/>
+    </LinearLayout>
+  </ScrollView>
+</LinearLayout>

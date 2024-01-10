@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+  <style name="PrimaryButtonBase" parent="Base.Widget.AppCompat.Button.Borderless">
+    <item name="android:shadowRadius">0</item>
+    <item name="android:textSize">@dimen/button_primary_text_size</item>
+    <item name="android:textColor">@color/text_white_grey_disabled</item>
+    <item name="android:minWidth">@dimen/element_max_width</item>
+    <item name="android:gravity">center</item>
+    <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    <item name="android:background">@drawable/primary_button</item>
+<!--    <string name="firmware_message" formatted="false">Contactless &amp; Chip Reader is unavailable during update, now %d%% complete.</string>-->
+<!--    <string name="tip_advice_format" formatted="false">(%1$.1f%% of $%2$.2f)</string>-->
+  </style>
+
+  <style name="AlertDialogBase" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <item name="android:gravity">center</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="SecondaryButtonBase" parent="Base.Widget.AppCompat.Button.Borderless">
+    <item name="android:shadowRadius">0</item>
+    <item name="android:textSize">@dimen/button_secondary_text_size</item>
+    <item name="android:textColor">@color/colorPrimary</item>
+    <item name="android:minWidth">@dimen/element_max_width</item>
+    <item name="android:gravity">center</item>
+    <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    <item name="android:background">@drawable/secondary_button</item>
+  </style>
+</resources>

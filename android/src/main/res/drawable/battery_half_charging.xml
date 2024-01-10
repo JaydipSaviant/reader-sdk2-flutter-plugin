@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+  <aapt:attr name="android:drawable">
+    <vector
+        android:width="32dp"
+        android:height="24dp"
+        android:viewportWidth="32"
+        android:viewportHeight="24">
+      <path
+          android:pathData="M6,5L29,5A2,2 0,0 1,31 7L31,17A2,2 0,0 1,29 19L6,19A2,2 0,0 1,4 17L4,7A2,2 0,0 1,6 5z"
+          android:strokeWidth="2"
+          android:fillColor="#00000000"
+          android:strokeColor="#71767B"/>
+      <path
+          android:pathData="M0,10C0,8.8954 0.8954,8 2,8H3V16H2C0.8954,16 0,15.1046 0,14V10Z"
+          android:fillColor="#71767B"/>
+      <path
+          android:pathData="M25,7L28,7A1,1 0,0 1,29 8L29,16A1,1 0,0 1,28 17L25,17A1,1 0,0 1,24 16L24,8A1,1 0,0 1,25 7z"
+          android:fillColor="#26B223"/>
+      <path
+          android:name="animatedBar"
+          android:pathData="M19,7L22,7A1,1 0,0 1,23 8L23,16A1,1 0,0 1,22 17L19,17A1,1 0,0 1,18 16L18,8A1,1 0,0 1,19 7z"
+          android:fillColor="#26B223"/>
+    </vector>
+  </aapt:attr>
+
+  <target android:name="animatedBar">
+    <aapt:attr name="android:animation">
+      <objectAnimator
+          android:duration="400"
+          android:propertyName="fillAlpha"
+          android:repeatCount="-1"
+          android:valueFrom="1"
+          android:repeatMode="reverse"
+          android:valueTo="0" />
+    </aapt:attr>
+  </target>
+</animated-vector>
