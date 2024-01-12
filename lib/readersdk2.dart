@@ -59,13 +59,15 @@ class Readersdk2 {
     }
   }
 
-  static Future<Location> currentEnv(String currentEnvironment) async {
+  static Future<bool> currentEnv(String currentEnvironment) async {
     try {
       var params = <String, dynamic>{
         'currentEnvironment': currentEnvironment,
       };
       var currentEnvironmentNativeObject =
           await channel.invokeMethod('currentAuthorisation', params);
+      debugPrint(
+          "isAuthorized 1 1 1 1 69 ==== $currentEnvironmentNativeObject");
       return currentEnvironmentNativeObject;
     } on PlatformException catch (ex) {
       throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],

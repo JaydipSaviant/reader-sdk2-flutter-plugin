@@ -34,8 +34,6 @@ import com.squareup.sdk.readersdk2.PREFS_AUTH_LOCATION_ID
 import com.squareup.sdk.readersdk2.PREFS_AUTH_LOCATION_NAME
 import com.squareup.sdk.readersdk2.R
 import com.squareup.sdk.readersdk2.auth.OAuthHelper.Environment
-import com.squareup.sdk.readersdk2.auth.OAuthHelper.SANDBOX
-import com.squareup.sdk.readersdk2.auth.OAuthHelper.UI_TESTING_SANDBOX
 import io.flutter.BuildConfig
 import kotlin.system.exitProcess
 
@@ -45,7 +43,7 @@ class AuthorizeActivity : AppCompatActivity() {
     fun getName() = "AuthorizeActivity"
 
     private var authData: Uri? = null
-    private lateinit var authorizationManager: AuthorizationManager
+    private var authorizationManager: AuthorizationManager? = null
     private lateinit var callbackRef: CallbackReference
     private lateinit var prefs: SharedPreferences
     lateinit var currentEnvironment: Environment
@@ -67,9 +65,7 @@ class AuthorizeActivity : AppCompatActivity() {
             it.name == OAuthHelper.getCurrentEnvironmentName(this)
         }
 
-        authorizationManager = ReaderSdk.authorizationManager()
 
-        Log.d(TAG, "onCreate: hfhfhfhfhfhfh = 72 ${authorizationManager.authorizationState}")
 
         callbackRef = authorizationManager!!.addAuthorizeCallback {
             onAuthorizeResult(it)
@@ -147,26 +143,23 @@ class AuthorizeActivity : AppCompatActivity() {
         restartApp(this)
     }
 
-    fun authorizeWithSandbox() {
-        authorizationManager = ReaderSdk.authorizationManager()
-        Log.d(TAG, "onCreate: fdsbhhfdshfcbdshfbchdsf = ${authorizationManager}")
-        authorizationManager?.let {
-            OAuthHelper.authorizeIfPossible(
-                it,
-                Uri.parse(
-                    "mockurl://fake?" +
-                            "access_token=${currentEnvironment.authToken}&" +
-                            "location_id=${currentEnvironment.locationId}&" +
-                            "authorization_code=unusedInSandbox"
-                )
+    fun authorizeWithSandbox(authorizationMan: AuthorizationManager) : Boolean {
+
+       return OAuthHelper.authorizeIfPossible(
+            authorizationMan,
+            Uri.parse(
+                "mockurl://fake?" +
+//                            "access_token=${currentEnvironment.authToken}&" +
+//                            "location_id=${currentEnvironment.locationId}&" +
+                        "access_token=EAAAEJe7nhcIDV2cXO1edJafX0ZNFQk42lqxVZjYn1kc3Tg7lN-P32GlFey5OepV&"+
+                        "location_id=LWTCANRWNHMF09&" +
+                        "authorization_code=unusedInSandbox"
             )
-        }
-
-
+        )
     }
 
     fun authorizeWithOauth() {
-        Log.d(TAG, "authorizeWithOauth: ")
+        Log.d(TAG, "authorizeWithOauth: 164")
         OAuthHelper.startOAuthFlow(currentEnvironment, this)
     }
 
@@ -207,7 +200,7 @@ class AuthorizeActivity : AppCompatActivity() {
             .setMessage(failure.errorMessage)
             .setPositiveButton("Retry") { _, _ ->
                 OAuthHelper
-                    .authorizeIfPossible(authorizationManager, authData)
+                    .authorizeIfPossible(authorizationManager!!, authData)
             }
             .show()
     }
@@ -228,7 +221,20 @@ class AuthorizeActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun finishWithAuthorizedResult() {
+    fun firstTimeCreateInten(){
+        val context = applicationContext
+
+//        val context: Context = this@AuthorizeActivity
+//        val applicationContext = context.applicationContext
+
+        Log.d(TAG, "firstTimeCreateInten: ${applicationContext}")
+        val intent = Intent(context, this::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
+    }
+
+    fun finishWithAuthorizedResult() {
         // Show MockReader UI if we're in Sandbox and logged in
         if (ReaderSdk.isSandboxEnvironment()) {
             MockReaderUI.show()

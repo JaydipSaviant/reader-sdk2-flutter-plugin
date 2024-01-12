@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/screen/add_authorise_screen.dart';
-import 'package:readersdk2_example/screen/permission_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,19 +23,17 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: _buildTheme(),
-      title: 'ReaderSDK',
-      home: const AddAuthorisedScreen()
-       //const PermissionScreen(),
-    );
+        debugShowCheckedModeBanner: false,
+        theme: _buildTheme(),
+        title: 'ReaderSDK',
+        home: const AddAuthorisedScreen()
+        //const PermissionScreen(),
+        );
   }
 }
-
 
 ThemeData _buildTheme() {
   var base = ThemeData.light();

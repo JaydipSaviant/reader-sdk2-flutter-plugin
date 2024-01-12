@@ -26,7 +26,18 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
         },
       ));
     } else {
-      Readersdk2.currentEnv(selectedOption);
+      var isCurrentEnv = await Readersdk2.currentEnv(selectedOption);
+      if (isCurrentEnv) {
+        var isAuthorized = await Readersdk2.callNativeMethod;
+        if (isAuthorized) {
+          debugPrint("is authorised flutter 33 = $isAuthorized");
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return const PermissionScreen();
+            },
+          ));
+        }
+      }
     }
   }
 

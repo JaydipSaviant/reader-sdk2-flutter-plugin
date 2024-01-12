@@ -2,9 +2,13 @@ package com.squareup.sdk.readersdk2
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat.startActivity
 import com.squareup.sdk.reader2.ReaderSdk
+import com.squareup.sdk.reader2.ReaderSdk.authorizationManager
+import com.squareup.sdk.readersdk2.auth.AuthorizeActivity
 import com.squareup.sdk.readersdk2.auth.OAuthHelper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -13,6 +17,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+
 
 /** Readersdk2Plugin */
 class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
@@ -23,18 +28,26 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private lateinit var channel: MethodChannel
     private var currentActivity: Activity? = null
 
-    private lateinit var authorisedModule: AuthorizeModule
+    lateinit var authorisedModule: AuthorizeModule
     private var paymentModule: PaymentModule = PaymentModule()
+    private var authorizeActivity: AuthorizeActivity = AuthorizeActivity()
 
     override fun onMethodCall(call: MethodCall, @NonNull result: Result) {
         when (call.method) {
             "isAuthorized" -> {
-                val isAuthorized = authorisedModule.isAuthorized(result)
-                Log.d("TAG", "onMethodCall---> isAuthorized 123: $isAuthorized")
-                result.success(isAuthorized)
+                Log.d("TAG", "onMethodCall---> invoked 35")
+                Log.d("TAG", "onMethodCall---> isAuthorized 35: $result")
+                val isAuthorize = authorisedModule.isAuthorized()
+                if (!isAuthorize){
+                    authorizeActivity.firstTimeCreateInten()
+                }
+
+                Log.d("TAG", "onMethodCall---> isAuthorized 123: $isAuthorize")
+                result.success(isAuthorize)
             }
 
             "isAuthorizationInProgress" -> {
+                Log.d("TAG", "onMethodCall---> invoked 43")
                 val isAuthorizationInProgress = authorisedModule.isAuthorizationInProgress(result)
                 Log.d(
                     "TAG",
@@ -44,12 +57,14 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "authorizedLocation" -> {
+                Log.d("TAG", "onMethodCall---> invoked 53")
                 val authorizedLocation = authorisedModule.authorizedLocation(result)
                 Log.d("TAG", "onMethodCall---> authorizedLocation 456: $authorizedLocation")
                 result.success(authorizedLocation)
             }
 
             "authorize" -> {
+                Log.d("TAG", "onMethodCall---> invoked 60")
                 val authCode: String? = call.argument("authCode")
                 val authorize = authorisedModule.authorize(authCode!!, result)
                 Log.d("TAG", "onMethodCall---> authorizedLocation 1: $authCode")
@@ -58,10 +73,12 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "currentAuthorisation" -> {
+                Log.d("TAG", "onMethodCall---> invoked 69")
                 val currentAuthentication: String? = call.argument("currentEnvironment")
                 Log.d("TAG", "onMethodCall: currentAuthentication = $currentAuthentication ")
                 val currentEnvironments = authorisedModule.currentEnvironment(currentAuthentication)
-                result.success(currentAuthentication)
+                Log.d("TAG", "onMethodCall: currentAuthentication 73 = $currentEnvironments ")
+                result.success(currentEnvironments)
             }
 
             "startPaymentCheckout" -> {
@@ -83,6 +100,7 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "readersdk2")
         Log.d("TAG", "onAttachedToEngine: $channel")
         channel.setMethodCallHandler(this)
+
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -116,12 +134,17 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun autorizationInit(context: Context) {
-        authorisedModule = AuthorizeModule()
-        Log.d("TAG", "world 120:--> $authorisedModule")
         val appId = OAuthHelper.getAppId(context)
-        Log.d("TAG", "world 122:--> $authorisedModule")
-        Log.d("TAG", "autorizationInit:--> $appId")
         ReaderSdk.initialize(appId, currentActivity!!.application)
-        Log.d("TAG", "onMethodCall---> isAuthorized 117: $appId")
+        authorisedModule = AuthorizeModule()
+        if (::authorisedModule.isInitialized) {
+            // Use authorisedModule
+            Log.d("TAG", "onMethodCall---> isAuthorized 33")
+        } else {
+            // Handle the case where the property is not initialized
+            Log.d("TAG", "onMethodCall---> isAuthorized 36")
+        }
     }
+
+
 }

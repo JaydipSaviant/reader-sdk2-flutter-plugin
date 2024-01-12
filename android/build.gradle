@@ -90,7 +90,7 @@ dependencies {
     implementation "com.squareup.sdk.reader:reader-sdk:2.0.0-alpha19"
     implementation "com.squareup.sdk.reader:mockreader-ui:2.0.0-alpha19"
     implementation 'junit:junit:4.12'
-    def readerSdkVersion =  '2.0.0-alpha18'
+    def readerSdkVersion =  '2.0.0-alpha19'
     def playServicesBaseVersion = rootProject.hasProperty('googlePlayServiceVersion') ? rootProject.googlePlayServiceVersion : '16.0.1'
     implementation "com.google.android.gms:play-services-base:$playServicesBaseVersion"
    // api "com.squareup.sdk.reader:reader-sdk-$SQUARE_READER_SDK_APPLICATION_ID:$readerSdkVersion"
@@ -107,6 +107,8 @@ dependencies {
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+    implementation 'com.bugsnag:bugsnag-android:3.+'
 
 
 //    implementation 'com.github.bumptech.glide:glide:4.16.0'

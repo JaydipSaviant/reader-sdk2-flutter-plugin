@@ -1,8 +1,10 @@
 package com.squareup.sdk.readersdk2
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.util.Log
+import androidx.core.content.ContextCompat
 import com.squareup.sdk.reader2.ReaderSdk
 import com.squareup.sdk.reader2.authorization.AuthorizationManager
 import com.squareup.sdk.reader2.core.CallbackReference
@@ -11,6 +13,8 @@ import com.squareup.sdk.readersdk2.auth.AuthorizeActivity
 import com.squareup.sdk.readersdk2.auth.OAuthHelper
 import com.squareup.sdk.readersdk2.converter.LocationConverter
 import io.flutter.plugin.common.MethodChannel
+
+
 
 class AuthorizeModule {
     // Define all the authorization error debug codes and messages below
@@ -38,7 +42,6 @@ class AuthorizeModule {
     private var authorizeCallbackRef: CallbackReference? = null
     private var deauthorizeCallbackRef: CallbackReference? = null
     private val mainLooperHandler = Handler()
-   // private val authorizationManager: AuthorizationManager? = null
     private lateinit var callbackRef: CallbackReference
     private val authorizeActivity = AuthorizeActivity()
     private lateinit var prefs: SharedPreferences
@@ -46,12 +49,17 @@ class AuthorizeModule {
     private lateinit var currentEnvironment: OAuthHelper.Environment
     private lateinit var environments: List<OAuthHelper.Environment>
 
-    fun isAuthorized(result: MethodChannel.Result) {
-        Log.d(
-            "TAG",
-            "isAuthorized: result success == ${result.success(ReaderSdk.authorizationManager().authorizationState.isAuthorized)}"
-        )
-        result.success(ReaderSdk.authorizationManager().authorizationState.isAuthorized)
+    private var authorizationManager: AuthorizationManager? = null
+
+    init {
+        Log.d("TAG", "configureFlutterEngine: 51")
+        authorizationManager = ReaderSdk.authorizationManager()
+        Log.d("TAG", "configureFlutterEngine: 53")
+    }
+
+    fun isAuthorized(): Boolean {
+
+        return authorizationManager?.authorizationState!!.isAuthorized
     }
 
     fun isAuthorizationInProgress(result: MethodChannel.Result) {
@@ -92,79 +100,17 @@ class AuthorizeModule {
                 "LBBSYN1QKHJSY"
             )
         }
-
-
-//        if (flutterResult == null) {
-//            flutterResult.error(
-//                ErrorHandlerUtils.getErrorCode(error.),
-//                error.message,
-//                ErrorHandlerUtils.getDebugErrorObject(error.debugCode, error.debugMessage)
-//            )
-//            return
-//        }
-//
-//        val location = result.successValue
-//        val locationConverter = LocationConverter()
-
-//        if (authorizeCallbackRef != null) {
-//            flutterResult.error(
-//                ErrorHandlerUtils.USAGE_ERROR,
-//                ErrorHandlerUtils.getNativeModuleErrorMessage(FL_AUTHORIZE_ALREADY_IN_PROGRESS),
-//                ErrorHandlerUtils.getDebugErrorObject(
-//                    FL_AUTHORIZE_ALREADY_IN_PROGRESS,
-//                    FL_MESSAGE_AUTHORIZE_ALREADY_IN_PROGRESS
-//                )
-//            )
-//            return
-//        }
-
-
-//        authorizeCallbackRef = ReaderSdk.authorizationManager().addAuthorizeCallback {
-//            val location = it
-//            Log.d("TAG", "authorize: location it $location")
-//            //   it
-//            //fun onResult(result: Result<AuthorizedLocation, ResultError<AuthorizeErrorCode>>) {
-//            authorizeCallbackRef?.clear()
-//            authorizeCallbackRef = null
-//
-//                if (result) {
-//                    val error = result.error
-//                    flutterResult.error(
-//                        ErrorHandlerUtils.getErrorCode(error.code),
-//                        error.message,
-//                        ErrorHandlerUtils.getDebugErrorObject(error.debugCode, error.debugMessage)
-//                    )
-//                    return
-//                }
-//
-//                val location = result.successValue
-//            val locationConverter = LocationConverter()
-////
-////                flutterResult.success(locationConverter.toMapObject(location))
-//            //  }
-//        }
-//        mainLooperHandler.post {
-//            Log.d("TAG", "authorize: mainLooper ")
-//            ReaderSdk.authorizationManager().authorize(
-//                "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW",
-//                "LBBSYN1QKHJSY"
-//            )
-//        }
     }
 
-    fun currentEnvironment(currentAuthentication: String?) {
-//        currentEnvironment = environments.first {
-//            it.name == OAuthHelper.getCurrentEnvironmentName()
-//        }
-        Log.d("TAG", "currentEnvironment 980980980980")
-      //  authorizeActivity.currentEnvironment.name = currentAuthentication
-      //  Log.d("TAG", "currentEnvironment: ${authorizeActivity.currentEnvironment}")
+    fun currentEnvironment(currentAuthentication: String?) : Boolean {
+        var isValue: Boolean = false
+
         when {
             (currentAuthentication == OAuthHelper.SANDBOX || currentAuthentication == OAuthHelper.UI_TESTING_SANDBOX) ->
-                authorizeActivity.authorizeWithSandbox()
-
-                    authorizeActivity.useOAuth -> authorizeActivity.authorizeWithOauth()
+              isValue =  authorizeActivity.authorizeWithSandbox(authorizationManager!!)
+            authorizeActivity.useOAuth -> authorizeActivity.authorizeWithOauth()
             else -> authorizeActivity.authorizeWithPAT()
         }
+        return  isValue
     }
 }
