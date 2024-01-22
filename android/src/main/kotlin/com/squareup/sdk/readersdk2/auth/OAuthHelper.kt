@@ -51,14 +51,17 @@ object OAuthHelper {
     /**
      * Returns application id for current environment or for Production if it is first app launch.
      */
-    fun getAppId(context: Context): String {
-        val currentEnvironmentName = getCurrentEnvironmentName(context)
+    fun getAppId(context: Context, currentEnvironmentName: String): String {
+        Log.d("TAG", "getAppId: 5555 $currentEnvironmentName")
         val currentEnvironment = getAllEnvironments(context)
             .firstOrNull { it.name == currentEnvironmentName }
         checkNotNull(currentEnvironment) {
             "Configuration for environment \"$currentEnvironmentName\" not found. Make sure that " +
                     "environments.xml contains this configuration."
+
+            Log.d("TAG", "getAppId: 5555 $currentEnvironment")
         }
+        Log.d("TAG", "getAppId: 62 $currentEnvironment")
         return currentEnvironment.applicationId
     }
 

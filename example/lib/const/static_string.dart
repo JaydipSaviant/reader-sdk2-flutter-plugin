@@ -35,4 +35,7 @@ class StaticString {
       "Press and hold the button on your reader until the lights flesh orange, then release the button and place the reader next to this device to pair";
   static String pay = "Pay";
   static String authoriseWithOauth = "Authorise with oAuth";
+  static String charges = "charge";
+  static String tapMockReader =
+      "Tap to MockReader";
 }

@@ -4,7 +4,7 @@ import com.squareup.sdk.reader2.payment.Card
 import com.squareup.sdk.reader2.payment.CardPaymentDetails
 import com.squareup.sdk.reader2.payment.CashDetails
 import com.squareup.sdk.reader2.payment.Money
-import com.squareup.sdk.reader2.payment.Payment
+import com.squareup.sdk.reader2.payment.Payment.OnlinePayment
 
 fun formatAmount(amount: Long) = "$%.2f".format(amount / 100.0)
 
@@ -52,7 +52,7 @@ fun CardPaymentDetails.OnlineCardPaymentDetails.toHtml(): String {
 fun CashDetails.toHtml() =
     "Buyer supplied ${buyerSuppliedMoney.toHtml()}, change ${changeBackMoney.toHtml()}"
 
-fun Payment.OnlinePayment.toHtml() = "<b>Payment Details</b><br>" +
+fun OnlinePayment.toHtml() = "<b>Payment Details</b><br>" +
         "<br><b>Payment Id</b><br>$id" +
         "<br><b>Order Id</b><br>$orderId" +
         "<br><b>Reference ID</b><br>$referenceId" +
@@ -60,8 +60,8 @@ fun Payment.OnlinePayment.toHtml() = "<b>Payment Details</b><br>" +
         "<br><b>Team Member ID</b><br>$teamMemberId" +
         "<br><b>Status</b><br>$status" +
         "<br><b>Total Money</b><br>${totalMoney.toHtml()}" +
-        "<br><b>Total Tip Money</b><br>${tipMoney?.toHtml()}" +
-        "<br><b>App Fee Money</b><br>${appFeeMoney?.toHtml()}" +
+        "<br><b>Total Tip Money</b><br>${tipMoney.toHtml()}" +
+        "<br><b>App Fee Money</b><br>${appFeeMoney.toHtml()}" +
         "<br><b>Completed At</b><br>$createdAt" +
         "<br><b>Statement Description</b><br>$statementDescription" +
         "<br><b>Note</b><br>$note" +

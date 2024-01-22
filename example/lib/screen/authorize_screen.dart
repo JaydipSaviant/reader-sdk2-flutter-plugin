@@ -3,8 +3,8 @@
 import 'package:barcode_scan2/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:readersdk2/model/models.dart';
 import 'package:readersdk2/readersdk2.dart';
-import 'package:readersdk2/model/model.dart';
 import 'package:readersdk2_example/screen/checkout_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/dialog_modal.dart';

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:readersdk2/model/model.dart';
-import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
-import 'package:readersdk2_example/widgets/dialog_modal.dart';
 
 const _debug = !bool.fromEnvironment("dart.vm.product");
 

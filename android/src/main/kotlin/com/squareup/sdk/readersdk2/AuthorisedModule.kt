@@ -1,19 +1,19 @@
 package com.squareup.sdk.readersdk2
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.util.Log
-import androidx.core.content.ContextCompat
 import com.squareup.sdk.reader2.ReaderSdk
 import com.squareup.sdk.reader2.authorization.AuthorizationManager
 import com.squareup.sdk.reader2.core.CallbackReference
+import com.squareup.sdk.reader2.mockreader.ui.MockReaderUI
 import com.squareup.sdk.readersdk2.ErrorHandler.ErrorHandlerUtils
 import com.squareup.sdk.readersdk2.auth.AuthorizeActivity
 import com.squareup.sdk.readersdk2.auth.OAuthHelper
 import com.squareup.sdk.readersdk2.converter.LocationConverter
 import io.flutter.plugin.common.MethodChannel
-
 
 
 class AuthorizeModule {
@@ -56,14 +56,16 @@ class AuthorizeModule {
         authorizationManager = ReaderSdk.authorizationManager()
         Log.d("TAG", "configureFlutterEngine: 53")
     }
+    fun isMockReaderUI() {
+        return MockReaderUI.show()
+    }
 
     fun isAuthorized(): Boolean {
-
         return authorizationManager?.authorizationState!!.isAuthorized
     }
 
-    fun isAuthorizationInProgress(result: MethodChannel.Result) {
-        result.success(ReaderSdk.authorizationManager().authorizationState.isAuthorizationInProgress);
+    fun isAuthorizationInProgress(): Boolean {
+        return  authorizationManager?.authorizationState!!.isAuthorizationInProgress
     }
 
     fun authorizedLocation(result: MethodChannel.Result) {
@@ -102,15 +104,21 @@ class AuthorizeModule {
         }
     }
 
-    fun currentEnvironment(currentAuthentication: String?) : Boolean {
+    fun currentEnvironment(currentAuthentication: String?, context: Context) : Boolean {
         var isValue: Boolean = false
-
         when {
             (currentAuthentication == OAuthHelper.SANDBOX || currentAuthentication == OAuthHelper.UI_TESTING_SANDBOX) ->
               isValue =  authorizeActivity.authorizeWithSandbox(authorizationManager!!)
-            authorizeActivity.useOAuth -> authorizeActivity.authorizeWithOauth()
-            else -> authorizeActivity.authorizeWithPAT()
+            authorizeActivity.useOAuth -> authorizeActivity.authorizeWithOauth(context)
+            else -> authorizeActivity.authorizeWithPAT(authorizationManager!!)
         }
+        Log.d("TAG", "currentEnvironment: 99 $isValue")
+
+
+//        ReaderSdk.authorizationManager().authorize(
+//            "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW",
+//            "LBBSYN1QKHJSY"
+//        )
         return  isValue
     }
 }

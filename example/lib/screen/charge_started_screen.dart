@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
 import 'package:readersdk2_example/screen/add_credit_card_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/square_logo.dart';
 
 class ChargesStartedScreen extends StatefulWidget {
-  const ChargesStartedScreen({super.key});
+  final String input;
+  const ChargesStartedScreen({super.key, required this.input});
 
   @override
   State<ChargesStartedScreen> createState() => _ChargesStartedScreenState();
@@ -35,7 +37,7 @@ class _ChargesStartedScreenState extends State<ChargesStartedScreen> {
             height: 30,
           ),
           Text(
-            StaticString.amount,
+            widget.input,
             style: const TextStyle(
               color: Colors.white,
               fontSize: 50,
@@ -46,15 +48,20 @@ class _ChargesStartedScreenState extends State<ChargesStartedScreen> {
           SizedBox(
             height: 30,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              StaticString.insertCardPayments,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 40,
+          InkWell(
+            onTap: ()async{
+             await Readersdk2.mockReaderUI;
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                StaticString.tapMockReader,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 30,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           ),
           const SizedBox(

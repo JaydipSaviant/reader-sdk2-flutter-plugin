@@ -15,6 +15,7 @@ class AddAuthorisedScreen extends StatefulWidget {
 
 class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
   String selectedOption = "Production";
+  var isCurrentEnv;
 
   void checkAuthorisedAndNavigate() async {
     var isAuthorized = await Readersdk2.callNativeMethod;
@@ -26,7 +27,7 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
         },
       ));
     } else {
-      var isCurrentEnv = await Readersdk2.currentEnv(selectedOption);
+      isCurrentEnv = await Readersdk2.currentEnv(selectedOption);
       if (isCurrentEnv) {
         var isAuthorized = await Readersdk2.callNativeMethod;
         if (isAuthorized) {
@@ -40,6 +41,11 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
       }
     }
   }
+  // @override
+  // void initState() {
+  //   Readersdk2.currentEnvirment(selectedOption);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +66,7 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
               onChanged: (value) {
                 setState(() {
                   selectedOption = value!;
+                  // Readersdk2.currentEnvirment(selectedOption);
                 });
               },
             ),
@@ -75,6 +82,7 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
               onChanged: (value) {
                 setState(() {
                   selectedOption = value!;
+                  // Readersdk2.currentEnvirment(selectedOption);
                 });
               },
             ),
@@ -85,7 +93,17 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
               foregroundColor: Colors.white,
               text: StaticString.authoriseWithOauth.toUpperCase(),
               onPressed: () {
-                checkAuthorisedAndNavigate();
+                //checkAuthorisedAndNavigate();
+                Readersdk2.currentEnv(selectedOption).then((value) {
+                  debugPrint("cureent enviorment = $value");
+                  if (value) {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return const PermissionScreen();
+                      },
+                    ));
+                  }
+                });
               },
             ),
           ]),

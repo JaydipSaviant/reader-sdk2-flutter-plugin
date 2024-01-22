@@ -1,5 +1,8 @@
 package com.squareup.sdk.readersdk2.payment
 
+import android.content.Context
+import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,7 +21,8 @@ class ChargeViewModel : ViewModel() {
     var paymentInProgress = false
     private val paymentManager = ReaderSdk.paymentManager()
     private var callbacks = mutableListOf<CallbackReference>()
-
+    private var alertDialog: AlertDialog? = null
+    private lateinit var context: Context
 
     fun getPaymentResult(): LiveData<PaymentResult> = paymentResult
 
@@ -50,10 +54,18 @@ class ChargeViewModel : ViewModel() {
         return paymentHandler!!.alternateMethods
     }
 
-    fun startPayment(parameters: PaymentParameters) {
+    fun startPayment(parameters: PaymentParameters, contextReader: Context?) {
+        if (contextReader != null) {
+            context = contextReader
+        }
         if (paymentInProgress) return
+        Log.d("TAG", "startPayment:  567 $paymentInProgress")
         paymentInProgress = true
+        Log.d("TAG", "startPayment:  567 $paymentInProgress")
         paymentHandler = paymentManager.startPaymentActivity(parameters)
+        Log.d("TAG", "startPayment:  567 $paymentHandler")
+        var payment = getPaymentResult()
+        Log.d("TAG", "startPayment: 9898 $payment")
     }
 
     fun cancel() {

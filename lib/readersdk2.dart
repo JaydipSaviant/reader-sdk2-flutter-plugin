@@ -1,13 +1,38 @@
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:readersdk2/model/model.dart';
-import 'package:readersdk2/model/serilizers.dart';
+import 'package:readersdk2/model/models.dart';
+import 'package:readersdk2/model/serializers.dart';
 
 class Readersdk2 {
   static final _standardSerializers =
       (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
   static const MethodChannel channel = MethodChannel('readersdk2');
+
+  // static Future<void> currentEnvirment(String currentEnvironment) async {
+  //   var params = <String, dynamic>{
+  //     'envPrams': currentEnvironment,
+  //   };
+  //   try {
+  //     var isEnv = await channel.invokeMethod('currentEnv', params);
+  //     debugPrint("isCurrentEnv==== $isEnv");
+  //     return isEnv;
+  //   } on PlatformException catch (ex) {
+  //     throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
+  //         ex.details['debugMessage']);
+  //   }
+  // }mockReaderUI
+
+  static Future<void> get mockReaderUI async {
+    try {
+      var ismockReaderUI = await channel.invokeMethod('mockReaderUI');
+      debugPrint("ismockReaderUI==== $ismockReaderUI");
+      return ismockReaderUI;
+    } on PlatformException catch (ex) {
+      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
+          ex.details['debugMessage']);
+    }
+  }
 
   static Future<bool> get callNativeMethod async {
     try {
@@ -75,14 +100,24 @@ class Readersdk2 {
     }
   }
 
-  // Future<void> startCheckout(Map<String, dynamic> checkoutParameters) async {
-  //   try {
-  //     await channel.invokeMethod('startPaymentCheckout', checkoutParameters);
-  //     debugPrint('Result from native parameter: $checkoutParameters');
-  //   } on PlatformException catch (e) {
-  //     debugPrint('Error starting checkout: ${e.message}');
-  //   }
-  // }
+  static Future<CheckoutResult> startCheckout(
+      CheckoutParameters checkoutParams) async {
+    try {
+      var params = <String, dynamic>{
+        'checkoutParams': _standardSerializers.serializeWith(
+            CheckoutParameters.serializer, checkoutParams),
+      };
+      var checkoutResultNativeObject =
+          await channel.invokeMethod('startCheckout', params);
+      debugPrint('Result from native parameter payment : $params');
+
+      return _standardSerializers.deserializeWith(
+          CheckoutResult.serializer, checkoutResultNativeObject)!;
+    } on PlatformException catch (ex) {
+      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
+          ex.details['debugMessage']);
+    }
+  }
 }
 
 class ReaderSdk2Exception implements Exception {

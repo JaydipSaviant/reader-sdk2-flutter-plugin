@@ -58,7 +58,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             setOnClickCopyToClipboard()
         }
         findPreference<Preference>(getString(R.string.application_id_button_key))?.run {
-            summary = OAuthHelper.getAppId(context)
+            summary = OAuthHelper.getAppId(context, "")
             setOnClickCopyToClipboard()
         }
 

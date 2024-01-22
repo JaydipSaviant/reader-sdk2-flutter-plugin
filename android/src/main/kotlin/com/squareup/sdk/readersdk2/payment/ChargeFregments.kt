@@ -441,7 +441,7 @@ class ChargeFragment : Fragment(R.layout.charge_fragment) {
         val parameters = builder.build()
         Log.i("demo-app", "Starting payment with parameters=$parameters")
 
-        viewModel.startPayment(parameters)
+        viewModel.startPayment(parameters, null)
     }
 
     private fun dismissDialog() {

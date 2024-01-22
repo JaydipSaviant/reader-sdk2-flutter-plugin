@@ -55,48 +55,6 @@ class AuthorizeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.authorizing_activity)
-        prefs = getSharedPreferences(DEMO_APP_PREFS, MODE_PRIVATE)
-        useOAuth = resources.getBoolean(R.bool.sqrsdk_2_environment_use_oauth)
-
-        environments = OAuthHelper.getAllEnvironments(this)
-
-        currentEnvironment = environments.first {
-            it.name == OAuthHelper.getCurrentEnvironmentName(this)
-        }
-
-
-
-        callbackRef = authorizationManager!!.addAuthorizeCallback {
-            onAuthorizeResult(it)
-            Log.d(TAG, "onCreate: caall back ref = $callbackRef")
-        }
-        findViewById<View>(R.id.authorize).setOnClickListener {
-            // For a more secured authorization we encourage you to use OAuth instead of hardcoding your PAT.
-            // Refer to the OAuth server implementation provided with the sample app to set one up
-            // and then you can use the OAuthHelper to connect to it from this app.
-            // authorizeWithOauth()
-//            when {
-//                (currentEnvironment.name == SANDBOX || currentEnvironment.name == UI_TESTING_SANDBOX) ->
-//                    authorizeWithSandbox()
-//
-//                useOAuth -> authorizeWithOauth()
-//                else -> authorizeWithPAT()
-//            }
-        }
-
-        initializeEnvironmentSelector()
-
-        if (savedInstanceState != null) {
-            if (authorizationManager!!.authorizationState.isAuthorized) {
-                Log.d(
-                    TAG,
-                    "onCreate: authorised 1 = ${authorizationManager!!.authorizationState.isAuthorized}"
-                )
-                finishWithAuthorizedResult()
-            }
-            authData = Uri.parse(savedInstanceState.getString(AUTH_DATA_KEY, null))
-        }
     }
 
     fun initializeEnvironmentSelector() {
@@ -143,45 +101,50 @@ class AuthorizeActivity : AppCompatActivity() {
         restartApp(this)
     }
 
-    fun authorizeWithSandbox(authorizationMan: AuthorizationManager) : Boolean {
+    fun authorizeWithSandbox(authorizationMan: AuthorizationManager): Boolean {
 
-       return OAuthHelper.authorizeIfPossible(
-            authorizationMan,
-            Uri.parse(
+        return OAuthHelper.authorizeIfPossible(
+            authorizationMan, Uri.parse(
                 "mockurl://fake?" +
 //                            "access_token=${currentEnvironment.authToken}&" +
 //                            "location_id=${currentEnvironment.locationId}&" +
-                        "access_token=EAAAEJe7nhcIDV2cXO1edJafX0ZNFQk42lqxVZjYn1kc3Tg7lN-P32GlFey5OepV&"+
-                        "location_id=LWTCANRWNHMF09&" +
-                        "authorization_code=unusedInSandbox"
+                        "access_token=EAAAEJe7nhcIDV2cXO1edJafX0ZNFQk42lqxVZjYn1kc3Tg7lN-P32GlFey5OepV&" + "location_id=LWTCANRWNHMF0&" + "authorization_code=unusedInSandbox"
             )
         )
     }
 
-    fun authorizeWithOauth() {
+    fun authorizeWithOauth(context: Context) {
         Log.d(TAG, "authorizeWithOauth: 164")
-        OAuthHelper.startOAuthFlow(currentEnvironment, this)
-    }
-
-    fun authorizeWithPAT() {
-        Log.d(TAG, "authorizeWithPAT: ")
-        authorizationManager?.authorize(
+        currentEnvironment = Environment(
+            4,
+            "Sandbox",
+            "https://connect.squareup.com",
+            "sandbox-sq0idb-7QT2EriOdn1Gz8jw7e2KSw",
             "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW",
             "LBBSYN1QKHJSY"
         )
-        // authorizationManager.authorize(currentEnvironment.authToken, currentEnvironment.locationId)
+        OAuthHelper.startOAuthFlow(currentEnvironment, context)
+    }
+
+    fun authorizeWithPAT(authorizationMan: AuthorizationManager) {
+        Log.d(TAG, "authorizeWithPAT: ")
+        authorizationMan.authorize(
+            "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW", "LBBSYN1QKHJSY"
+        )
+        Log.d(TAG, "authorizeWithPAT: 12 -- ${authorizationMan.authorizationState.isAuthorized}")
+
+//        authorizationMan.authorize(currentEnvironment.authToken, currentEnvironment.locationId)
     }
 
     fun onAuthorizeResult(result: AuthorizeResult) {
         Log.d(TAG, "onAuthorizeResult: $result ")
         when (result) {
             is Success -> {
-                prefs.edit()
-                    .apply {
-                        putString(PREFS_AUTH_LOCATION_NAME, result.value.name)
-                        putString(PREFS_AUTH_LOCATION_ID, result.value.locationId)
-                        apply()
-                    }
+                prefs.edit().apply {
+                    putString(PREFS_AUTH_LOCATION_NAME, result.value.name)
+                    putString(PREFS_AUTH_LOCATION_ID, result.value.locationId)
+                    apply()
+                }
                 finishWithAuthorizedResult()
             }
 
@@ -195,14 +158,10 @@ class AuthorizeActivity : AppCompatActivity() {
     }
 
     private fun showRetryDialog(failure: Failure<AuthorizedLocation, AuthorizeErrorCode>) {
-        AlertDialog.Builder(this)
-            .setTitle("Network Error")
-            .setMessage(failure.errorMessage)
+        AlertDialog.Builder(this).setTitle("Network Error").setMessage(failure.errorMessage)
             .setPositiveButton("Retry") { _, _ ->
-                OAuthHelper
-                    .authorizeIfPossible(authorizationManager!!, authData)
-            }
-            .show()
+                OAuthHelper.authorizeIfPossible(authorizationManager!!, authData)
+            }.show()
     }
 
     private fun showUsageErrorDialog(failure: Failure<AuthorizedLocation, AuthorizeErrorCode>) {
@@ -214,24 +173,24 @@ class AuthorizeActivity : AppCompatActivity() {
                 failure.errorCode.toString() + ": " + failure.debugCode + ", " + failure.debugMessage
             )
         }
-        AlertDialog.Builder(this)
-            .setTitle("Error")
-            .setMessage(dialogMessage)
-            .setNeutralButton("ok") { _, _ -> authData = null }
-            .show()
+        AlertDialog.Builder(this).setTitle("Error").setMessage(dialogMessage)
+            .setNeutralButton("ok") { _, _ -> authData = null }.show()
     }
 
-    fun firstTimeCreateInten(){
-        val context = applicationContext
-
+    fun firstTimeCreateInten(context: Context) {
 //        val context: Context = this@AuthorizeActivity
 //        val applicationContext = context.applicationContext
 
-        Log.d(TAG, "firstTimeCreateInten: ${applicationContext}")
+
+        Log.d(TAG, "firstTimeCreateInten: ${context.applicationContext}")
         val intent = Intent(context, this::class.java)
+        Log.d(TAG, "firstTimeCreateInten: 230 ${context.applicationContext}")
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+        Log.d(TAG, "firstTimeCreateInten: 232 ${context.applicationContext}")
+        context.startActivity(intent)
+        Log.d(TAG, "firstTimeCreateInten: 234 ${context.applicationContext}")
         finish()
+        Log.d(TAG, "firstTimeCreateInten: 236 ${context.applicationContext}")
     }
 
     fun finishWithAuthorizedResult() {
@@ -257,9 +216,7 @@ class AuthorizeActivity : AppCompatActivity() {
             )
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             alarmManager.set(
-                AlarmManager.RTC,
-                System.currentTimeMillis() + RESTART_DELAY_MS,
-                pendingIntent
+                AlarmManager.RTC, System.currentTimeMillis() + RESTART_DELAY_MS, pendingIntent
             )
             finish()
         }

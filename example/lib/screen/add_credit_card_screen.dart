@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:readersdk2/model/models.dart';
+import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
-import 'package:readersdk2_example/screen/add_card_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/card_formatter.dart';
 import 'package:readersdk2_example/widgets/date_formatter.dart';
+import 'package:built_collection/built_collection.dart';
 
+const _debug = !bool.fromEnvironment("dart.vm.product");
+ 
 class AddCreditCardScreen extends StatefulWidget {
   const AddCreditCardScreen({super.key});
 
@@ -145,15 +149,66 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
             SQButtonContainer(buttons: [
               SQRaisedButton(
                 text: StaticString.pay,
-                onPressed: () {
+                onPressed: () async {
                   if (cardNumberController.text.isNotEmpty &&
                       dateController.text.isNotEmpty &&
                       cvvController.text.isNotEmpty) {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddCardScreen(),
-                        ));
+
+var builder = CheckoutParametersBuilder();
+                            builder.amountMoney = MoneyBuilder()
+                              ..amount = 100
+                              ..currencyCode =
+                                  'USD'; // currencyCode is optional
+                            // Optional for all following configuration
+                            builder.skipReceipt = false;
+                            builder.collectSignature = true;
+                            builder.allowSplitTender = false;
+                            builder.delayCapture = false;
+                            builder.note = 'Hello 💳 💰 World!';
+                            builder.additionalPaymentTypes = ListBuilder([
+                              AdditionalPaymentType.cash,
+                              AdditionalPaymentType.manualCardEntry,
+                              AdditionalPaymentType.other
+                            ]);
+                            builder.tipSettings = TipSettingsBuilder()
+                              ..showCustomTipField = true
+                              ..showSeparateTipScreen = false
+                              ..tipPercentages = ListBuilder([15, 20, 30]);
+
+                            CheckoutParameters checkoutParameters =
+                                builder.build();
+                            try {
+                              var checkoutResult =
+                                  await Readersdk2.startCheckout(
+                                      checkoutParameters);
+                              print("102 line --- $checkoutResult");
+                              //_showTransactionDialog(checkoutResult);
+                            } on ReaderSdk2Exception catch (e) {
+                              switch (e.code) {
+                                case ErrorCode.checkoutErrorCanceled:
+                                  // Handle canceled transaction here
+                                  print('transaction canceled.');
+                                  break;
+                                case ErrorCode.checkoutErrorSdkNotAuthorized:
+                                  // Handle sdk not authorized
+                                  Navigator.pushReplacementNamed(context, '/');
+                                  break;
+                                default:
+                                  var errorMessage = e.message!;
+                                  if (_debug) {
+                                    errorMessage +=
+                                        '\n\nDebug Message: ${e.debugMessage}';
+                                    print(
+                                        '${e.code}:${e.debugCode}:${e.debugMessage}');
+                                  }
+                                // displayErrorModal(context, errorMessage);
+                              }
+                            }
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => const AddCardScreen(),
+                    //     ));
                   }
                 },
               ),

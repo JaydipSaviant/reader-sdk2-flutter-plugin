@@ -17,11 +17,15 @@ limitations under the License.
 */
 
 import 'package:flutter/material.dart';
+import 'package:readersdk2/model/models.dart';
+import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
+import 'package:readersdk2_example/screen/add_card_reader_screen.dart';
 import 'package:readersdk2_example/screen/charge_started_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/loading.dart';
 import 'package:readersdk2_example/widgets/network_button.dart';
+import 'package:built_collection/built_collection.dart';
 
 const _debug = !bool.fromEnvironment("dart.vm.product");
 
@@ -64,23 +68,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           backgroundColor: Colors.white,
                           foregroundColor: Colors.black,
                           text: StaticString.charge,
-                          onPressed: () {
+                          onPressed: () async {
                              Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                           ChargesStartedScreen()));
-                            
-                            // Readersdk2().startCheckout({
-                            //   'amount': StaticString.amount,
-                              // 'param2': 'value2',
-                              // //   }).then((value) {
-                              //     Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //             builder: (context) =>
-                              //              ChargesStartedScreen()));
-                            //});
+                                           AddCardReaderScreen()));
                           },
                         ),
                       ]),
