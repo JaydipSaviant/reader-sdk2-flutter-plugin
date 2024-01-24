@@ -1,7 +1,12 @@
 package com.squareup.sdk.readersdk2
 
 import android.content.Context
+import android.text.Html
 import android.util.Log
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import com.squareup.sdk.reader2.core.ErrorDetails
 import com.squareup.sdk.reader2.payment.CurrencyCode
 import com.squareup.sdk.reader2.payment.Money
 import com.squareup.sdk.reader2.payment.PaymentManager
@@ -9,89 +14,53 @@ import com.squareup.sdk.reader2.payment.PaymentParameters
 import com.squareup.sdk.readersdk2.payment.ChargeViewModel
 import io.flutter.plugin.common.MethodChannel
 import java.util.UUID
+import com.squareup.sdk.reader2.payment.Payment
+import com.squareup.sdk.readersdk2.payment.toHtml
+
 
 class PaymentModule {
 
-
-    //private var chargeFragment: ChargeFragment = ChargeFragment()
-
-//    private var paymentManager : PaymentManager? = null
-
-//    init {
-//        Log.d("TAG", ": wqb dews dhw fhasdjkf has rhbahjsb rdhsb")
-//        paymentManager = ReaderSdk.paymentManager()
-//        Log.d("TAG", ": wqb dews dhw fhasdjkf has rhbahjsb rdhsb   26")
-//    }
-
+    private lateinit var context: Context
     fun startCheckout(
         checkoutParameters: HashMap<String, Any>?,
         result: MethodChannel.Result,
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
-    ) {
+    ): String {
         if (checkoutParameters != null) {
-            //MyFlutterActivity()
-            //chargeFragment.startPayment()
-            //paymentManager.startPaymentActivity(parameters)
             Log.d("Tageee", "checkoutParameters::$checkoutParameters , $result")
-            startPayment(checkoutParameters, paymentManager!!, viewModel,contextReader)
-            //Log.d("Tageee", "checkoutParameters::$checkoutParameters , $result")
+            return startPayment(checkoutParameters, paymentManager, viewModel, contextReader)
         } else {
-            result.error("INVALID_ARGUMENT", "Invalid arguments", null)
+            // result.error("INVALID_ARGUMENT", "Invalid arguments", null)
+            return "INVALID_ARGUMENT"
         }
     }
-}
 
-fun HashMap<String, Any>?.toCheckoutParams(): CheckoutParams? {
-    return this?.let {
-        CheckoutParams(
-            tipSettings = it["tipSettings"] as? TipSettings ?: TipSettings(
-                emptyList(),
-                false,
-                false
-            ),
-            note = it["note"] as? String,
-            skipReceipt = it["skipReceipt"] as? Boolean ?: false,
-            amountMoney = (it["amountMoney"] as? HashMap<*, *>)?.let { moneyMap ->
-                AmountMoney(
-                    amount = moneyMap["amount"] as? Int ?: 0,
-                    currencyCode = moneyMap["currencyCode"] as? String ?: ""
-                )
-            } ?: AmountMoney(0, ""),
-            collectSignature = it["collectSignature"] as? Boolean ?: false,
-            allowSplitTender = it["allowSplitTender"] as? Boolean ?: false,
-            delayCapture = it["delayCapture"] as? Boolean ?: false,
-            additionalPaymentTypes = (it["additionalPaymentTypes"] as? List<*>)?.mapNotNull { type ->
-                type as? String
-            } ?: emptyList()
-        )
-    }
-}
-
-fun startPayment(
-    checkoutParameters: HashMap<String, Any>?,
-    paymentManager: PaymentManager,
-    viewModel: ChargeViewModel,
-    contextReader: Context,
-) {
-   // var paymentHandler: PaymentHandle? = null
-    val checkoutParams: CheckoutParams? = checkoutParameters.toCheckoutParams()
-
-    Log.d("TAG", "Actual payment start   62 $checkoutParams")
-    val builder = PaymentParameters.Builder(
-        amount = Money(checkoutParams?.amountMoney?.amount!!.toLong(), CurrencyCode.USD),
-        idempotencyKey = UUID.randomUUID().toString(),
-    ).autocomplete(true)
-    Log.d("TAG", "startPayment: builder = $builder")
-    Log.d("TAG", "startPayment: builder 11 = ${checkoutParams.amountMoney.amount}")
+    private fun startPayment(
+        checkoutParameters: HashMap<String, Any>?,
+        paymentManager: PaymentManager,
+        viewModel: ChargeViewModel,
+        contextReader: Context,
+    ): String {
+        context = contextReader
+        // var paymentHandler: PaymentHandle? = null
+        val checkoutParams: CheckoutParams? = checkoutParameters.toCheckoutParams()
 
 
-    /*if (!autoComplete) {
-        builder.acceptPartialAuthorization(
-            arguments?.getBoolean(KeypadFragment.PARAM_ACCEPT_PARTIAL) ?: false
-        )
-    }*/
+        Log.d("TAG", "Actual payment start   62 $checkoutParams")
+        val builder = PaymentParameters.Builder(
+            amount = Money(checkoutParams?.amountMoney?.amount!!.toLong(), CurrencyCode.USD),
+            idempotencyKey = UUID.randomUUID().toString(),
+        ).autocomplete(true)
+        Log.d("TAG", "startPayment: builder = $builder")
+        Log.d("TAG", "startPayment: builder 11 = ${checkoutParams.amountMoney.amount}")
+
+        /*if (!autoComplete) {
+            builder.acceptPartialAuthorization(
+                arguments?.getBoolean(KeypadFragment.PARAM_ACCEPT_PARTIAL) ?: false
+            )
+        }*/
 //    var tipAmount = 10
 //        if (tipAmount != null && tipAmount > 0) {
 //            builder.tipMoney(Money(tipAmount.toLong(), CurrencyCode.USD))
@@ -133,10 +102,79 @@ fun startPayment(
 //            builder.statementDescription(statementDescription)
 //        }
 
-    val parameters = builder.build()
-    Log.d("TAG", "startPayment:  116 9090  $parameters")
-    viewModel.startPayment(parameters,contextReader)
+        val parameters = builder.build()
+        Log.d("TAG", "startPayment:  116 9090  $parameters")
+        var resultStr = viewModel.startPayment(parameters)
+        Log.d("TAG", "startPayment: 102 - $resultStr")
+        return resultStr
+    }
+
+    private fun showChargeSuccessDialog(paymentResult: Payment) {
+        Log.d("TAG", "showChargeSuccessDialog: payment = $paymentResult")
+        showSimpleMessageDialog(
+            title = "Success", message = Html.fromHtml(
+                (paymentResult as Payment.OnlinePayment).toHtml(),
+            )
+        )
+    }
+
+    private fun showChargeFailureDialog(errorMessage: String, details: List<ErrorDetails>) =
+        showSimpleMessageDialog(
+            title = "Error",
+            message = Html.fromHtml(
+                details.joinToString(prefix = "<b>$errorMessage</b><p>",
+                    separator = "<p>",
+                    limit = 5,
+                    transform = {
+                        it.detail + if (it.field.isNullOrBlank()) {
+                            ""
+                        } else {
+                            "(${it.field}"
+                        }
+                    })
+            )
+        )
+
+    private fun showSimpleMessageDialog(
+        title: String,
+        message: CharSequence,
+    ) {
+        val dialog = AlertDialog.Builder(context).setTitle(title).setMessage(message)
+            .setPositiveButton(android.R.string.ok, null).show()
+
+        // Make the text inside the dialog selectable so one can copy it
+        (dialog?.findViewById<View>(android.R.id.message) as TextView).apply {
+            setTextIsSelectable(true)
+        }
+    }
 }
+
+fun HashMap<String, Any>?.toCheckoutParams(): CheckoutParams? {
+    return this?.let {
+        CheckoutParams(
+            tipSettings = it["tipSettings"] as? TipSettings ?: TipSettings(
+                emptyList(),
+                false,
+                false
+            ),
+            note = it["note"] as? String,
+            skipReceipt = it["skipReceipt"] as? Boolean ?: false,
+            amountMoney = (it["amountMoney"] as? HashMap<*, *>)?.let { moneyMap ->
+                AmountMoney(
+                    amount = moneyMap["amount"] as? Int ?: 0,
+                    currencyCode = moneyMap["currencyCode"] as? String ?: ""
+                )
+            } ?: AmountMoney(0, ""),
+            collectSignature = it["collectSignature"] as? Boolean ?: false,
+            allowSplitTender = it["allowSplitTender"] as? Boolean ?: false,
+            delayCapture = it["delayCapture"] as? Boolean ?: false,
+            additionalPaymentTypes = (it["additionalPaymentTypes"] as? List<*>)?.mapNotNull { type ->
+                type as? String
+            } ?: emptyList()
+        )
+    }
+}
+
 
 data class CheckoutParams(
     val tipSettings: TipSettings,

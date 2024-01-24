@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:built_value/serializer.dart';
 import 'package:built_value/standard_json_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -100,7 +103,7 @@ class Readersdk2 {
     }
   }
 
-  static Future<CheckoutResult> startCheckout(
+  static Future<String> startCheckout(
       CheckoutParameters checkoutParams) async {
     try {
       var params = <String, dynamic>{
@@ -111,13 +114,13 @@ class Readersdk2 {
           await channel.invokeMethod('startCheckout', params);
       debugPrint('Result from native parameter payment : $params');
 
-      return _standardSerializers.deserializeWith(
-          CheckoutResult.serializer, checkoutResultNativeObject)!;
-    } on PlatformException catch (ex) {
+      return checkoutResultNativeObject;
+      } on PlatformException catch (ex) {
       throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
           ex.details['debugMessage']);
     }
   }
+
 }
 
 class ReaderSdk2Exception implements Exception {

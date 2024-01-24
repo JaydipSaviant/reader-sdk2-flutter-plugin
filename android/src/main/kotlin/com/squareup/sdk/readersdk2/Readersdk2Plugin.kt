@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
 import com.squareup.sdk.reader2.ReaderSdk
+import com.squareup.sdk.reader2.mockreader.ui.MockReaderUI
 import com.squareup.sdk.reader2.payment.PaymentManager
 import com.squareup.sdk.readersdk2.auth.AuthorizeActivity
 import com.squareup.sdk.readersdk2.auth.OAuthHelper
@@ -36,7 +37,7 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var isAuthorize = false
     var currentAuthentication: String = "Production"
 
-    private var paymentManager : PaymentManager? = null
+    private var paymentManager: PaymentManager? = null
 
     override fun onMethodCall(call: MethodCall, @NonNull result: Result) {
         when (call.method) {
@@ -86,16 +87,24 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "currentAuthorisation" -> {
                 currentAuthentication = call.argument<String>("currentEnvironment").toString()
                 autorizationInit(currentActivity!!.applicationContext)
-                val currentEnvironments = authorisedModule.currentEnvironment(currentAuthentication, contextReader)
+                val currentEnvironments =
+                    authorisedModule.currentEnvironment(currentAuthentication, contextReader)
                 result.success(currentEnvironments)
             }
 
-             "startCheckout" -> {
-                 val checkoutParams: HashMap<String, Any>? = call.argument("checkoutParams")
-                 paymentModule.startCheckout(checkoutParams, result, paymentManager!!, viewModel!!,contextReader)
-                 Log.d("TAG", "onMethodCall--->: $checkoutParams")
-                // result.success("start payment checkout")
-             }
+            "startCheckout" -> {
+                val checkoutParams: HashMap<String, Any>? = call.argument("checkoutParams")
+                var resultPayment = paymentModule.startCheckout(
+                    checkoutParams,
+                    result,
+                    paymentManager!!,
+                    viewModel!!,
+                    contextReader
+                )
+                Log.d("TAG", "onMethodCall--->: $checkoutParams")
+                Log.d("TAG", "startPayment: 104 - $resultPayment")
+                result.success(resultPayment)
+            }
 
             else -> {
                 result.notImplemented()
@@ -155,15 +164,21 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         paymentManager = ReaderSdk.paymentManager()
         viewModel = ChargeViewModel()
         isAuthorize = authorisedModule.isAuthorized()
-        if (!isAuthorize){
-            isAuthorize =  authorisedModule.isAuthorized()
+        Log.d("TAG", "authorizationInit: 1 = $isAuthorize")
+        if (!isAuthorize) {
+            isAuthorize = authorisedModule.isAuthorized()
+            Log.d("TAG", "authorizationInit: 2 = $isAuthorize")
         }
-//        if(isAuthorize){
-//            Log.d("TAG", "autorizationInit: mockreader sdk 121 = $isAuthorize")
-//            if(ReaderSdk.isSandboxEnvironment()){
-//                Log.d("TAG", "autorizationInit: mockreader sdk")
-//                MockReaderUI.show()
-//            }
-//        }
+        if (isAuthorize) {
+            Log.d("TAG", "authorizationInit: mock reader sdk 121 = $isAuthorize")
+            if (ReaderSdk.isSandboxEnvironment()) {
+                Log.d(
+                    "TAG",
+                    "authorizationInit: mock reader sdk = ${ReaderSdk.isSandboxEnvironment()}"
+                )
+                MockReaderUI.show()
+                Log.d("TAG", "authorizationInit: mock reader show 99898 ")
+            }
+        }
     }
 }

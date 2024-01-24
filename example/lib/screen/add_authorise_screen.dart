@@ -17,30 +17,30 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
   String selectedOption = "Production";
   var isCurrentEnv;
 
-  void checkAuthorisedAndNavigate() async {
-    var isAuthorized = await Readersdk2.callNativeMethod;
-    if (isAuthorized) {
-      debugPrint("is authorised flutter = $isAuthorized");
-      Navigator.push(context, MaterialPageRoute(
-        builder: (context) {
-          return const PermissionScreen();
-        },
-      ));
-    } else {
-      isCurrentEnv = await Readersdk2.currentEnv(selectedOption);
-      if (isCurrentEnv) {
-        var isAuthorized = await Readersdk2.callNativeMethod;
-        if (isAuthorized) {
-          debugPrint("is authorised flutter 33 = $isAuthorized");
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return const PermissionScreen();
-            },
-          ));
-        }
-      }
-    }
-  }
+  // void checkAuthorisedAndNavigate() async {
+  //   var isAuthorized = await Readersdk2.callNativeMethod;
+  //   if (isAuthorized) {
+  //     debugPrint("is authorised flutter = $isAuthorized");
+  //     Navigator.push(context, MaterialPageRoute(
+  //       builder: (context) {
+  //         return const PermissionScreen();
+  //       },
+  //     ));
+  //   } else {
+  //     isCurrentEnv = await Readersdk2.currentEnv(selectedOption);
+  //     if (isCurrentEnv) {
+  //       var isAuthorized = await Readersdk2.callNativeMethod;
+  //       if (isAuthorized) {
+  //         debugPrint("is authorised flutter 33 = $isAuthorized");
+  //         Navigator.push(context, MaterialPageRoute(
+  //           builder: (context) {
+  //             return const PermissionScreen();
+  //           },
+  //         ));
+  //       }
+  //     }
+  //   }
+  // }
   // @override
   // void initState() {
   //   Readersdk2.currentEnvirment(selectedOption);

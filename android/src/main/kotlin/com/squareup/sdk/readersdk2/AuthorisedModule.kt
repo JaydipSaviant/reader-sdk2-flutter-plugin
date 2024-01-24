@@ -56,16 +56,21 @@ class AuthorizeModule {
         authorizationManager = ReaderSdk.authorizationManager()
         Log.d("TAG", "configureFlutterEngine: 53")
     }
+
     fun isMockReaderUI() {
         return MockReaderUI.show()
     }
 
     fun isAuthorized(): Boolean {
+        Log.d(
+            "TAG",
+            "authorizationInit: 090 = ${authorizationManager?.authorizationState!!.isAuthorized}"
+        )
         return authorizationManager?.authorizationState!!.isAuthorized
     }
 
     fun isAuthorizationInProgress(): Boolean {
-        return  authorizationManager?.authorizationState!!.isAuthorizationInProgress
+        return authorizationManager?.authorizationState!!.isAuthorizationInProgress
     }
 
     fun authorizedLocation(result: MethodChannel.Result) {
@@ -95,7 +100,7 @@ class AuthorizeModule {
             Log.d("TAG", "authorize: authorized callback ref it = $it")
         }
         Log.d("TAG", "authorize: authorized callback ref = $authorizeCallbackRef")
-                mainLooperHandler.post {
+        mainLooperHandler.post {
             Log.d("TAG", "authorize: mainLooper ")
             ReaderSdk.authorizationManager().authorize(
                 "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW",
@@ -104,11 +109,12 @@ class AuthorizeModule {
         }
     }
 
-    fun currentEnvironment(currentAuthentication: String?, context: Context) : Boolean {
+    fun currentEnvironment(currentAuthentication: String?, context: Context): Boolean {
         var isValue: Boolean = false
         when {
             (currentAuthentication == OAuthHelper.SANDBOX || currentAuthentication == OAuthHelper.UI_TESTING_SANDBOX) ->
-              isValue =  authorizeActivity.authorizeWithSandbox(authorizationManager!!)
+                isValue = authorizeActivity.authorizeWithSandbox(authorizationManager!!)
+
             authorizeActivity.useOAuth -> authorizeActivity.authorizeWithOauth(context)
             else -> authorizeActivity.authorizeWithPAT(authorizationManager!!)
         }
@@ -119,6 +125,6 @@ class AuthorizeModule {
 //            "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW",
 //            "LBBSYN1QKHJSY"
 //        )
-        return  isValue
+        return isValue
     }
 }

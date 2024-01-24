@@ -50,7 +50,7 @@ class _ChargesStartedScreenState extends State<ChargesStartedScreen> {
           ),
           InkWell(
             onTap: ()async{
-             await Readersdk2.mockReaderUI;
+            // await Readersdk2.mockReaderUI;
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

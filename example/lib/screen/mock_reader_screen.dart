@@ -5,7 +5,6 @@ import 'package:readersdk2_example/screen/checkout_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/network_button.dart';
 
-
 class MockReaderScreen extends StatefulWidget {
   const MockReaderScreen({super.key});
 
