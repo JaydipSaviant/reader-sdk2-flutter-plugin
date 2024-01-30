@@ -17,7 +17,6 @@ import java.util.UUID
 import com.squareup.sdk.reader2.payment.Payment
 import com.squareup.sdk.readersdk2.payment.toHtml
 
-
 class PaymentModule {
 
     private lateinit var context: Context
@@ -32,7 +31,6 @@ class PaymentModule {
             Log.d("Tageee", "checkoutParameters::$checkoutParameters , $result")
             return startPayment(checkoutParameters, paymentManager, viewModel, contextReader)
         } else {
-            // result.error("INVALID_ARGUMENT", "Invalid arguments", null)
             return "INVALID_ARGUMENT"
         }
     }
@@ -55,7 +53,6 @@ class PaymentModule {
         ).autocomplete(true)
         Log.d("TAG", "startPayment: builder = $builder")
         Log.d("TAG", "startPayment: builder 11 = ${checkoutParams.amountMoney.amount}")
-
         /*if (!autoComplete) {
             builder.acceptPartialAuthorization(
                 arguments?.getBoolean(KeypadFragment.PARAM_ACCEPT_PARTIAL) ?: false

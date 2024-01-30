@@ -25,23 +25,10 @@ class _AuthorizeScreenState extends State<AuthorizeScreen> {
  @override
   void initState() {
     super.initState();
-    checkAuthorisedAndNavigate();
   }
 
-  void checkAuthorisedAndNavigate() async {
-    var isAuthorized = await Readersdk2.callNativeMethod;
-    if (isAuthorized) {
-         debugPrint("is authorised flutter = $isAuthorized");
-      Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return const CheckoutScreen();
-            },
-          ));
-    }
-  }
 
   void authorizeQRCode(String authCode) async {
-    debugPrint("auth code 11--  $authCode");
     try {
       setState(() {
         _isLoading = true;

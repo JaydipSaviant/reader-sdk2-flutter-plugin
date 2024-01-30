@@ -43,16 +43,16 @@ class _MockReaderScreenState extends State<MockReaderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: NetworkButton(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return const CheckoutScreen();
-            },
-          ));
-        },
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      // floatingActionButton: NetworkButton(
+      //   onTap: () {
+      //     Navigator.push(context, MaterialPageRoute(
+      //       builder: (context) {
+      //         return const CheckoutScreen();
+      //       },
+      //     ));
+      //   },
+      // ),
       appBar: AppBar(
         title: Text(StaticString.squreReaders),
       ),

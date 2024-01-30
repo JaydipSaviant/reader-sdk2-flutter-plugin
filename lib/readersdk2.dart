@@ -12,42 +12,6 @@ class Readersdk2 {
       (serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
   static const MethodChannel channel = MethodChannel('readersdk2');
 
-  // static Future<void> currentEnvirment(String currentEnvironment) async {
-  //   var params = <String, dynamic>{
-  //     'envPrams': currentEnvironment,
-  //   };
-  //   try {
-  //     var isEnv = await channel.invokeMethod('currentEnv', params);
-  //     debugPrint("isCurrentEnv==== $isEnv");
-  //     return isEnv;
-  //   } on PlatformException catch (ex) {
-  //     throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
-  //         ex.details['debugMessage']);
-  //   }
-  // }mockReaderUI
-
-  static Future<void> get mockReaderUI async {
-    try {
-      var ismockReaderUI = await channel.invokeMethod('mockReaderUI');
-      debugPrint("ismockReaderUI==== $ismockReaderUI");
-      return ismockReaderUI;
-    } on PlatformException catch (ex) {
-      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
-          ex.details['debugMessage']);
-    }
-  }
-
-  static Future<bool> get callNativeMethod async {
-    try {
-      bool isAuthorized = await channel.invokeMethod('isAuthorized');
-      debugPrint("isAuthorized==== $isAuthorized");
-      return isAuthorized;
-    } on PlatformException catch (ex) {
-      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
-          ex.details['debugMessage']);
-    }
-  }
-
   Future<bool> get isAuthorizationInProgress async {
     try {
       bool isAuthorizationInProgress =
@@ -87,10 +51,12 @@ class Readersdk2 {
     }
   }
 
-  static Future<bool> currentEnv(String currentEnvironment) async {
+  static Future<bool> currentEnv(String currentEnvironment, String selectedAccessToken, String selectedLocationId) async {
     try {
       var params = <String, dynamic>{
         'currentEnvironment': currentEnvironment,
+        'selectedAccessToken': selectedAccessToken,
+        'selectedLocationId': selectedLocationId,
       };
       var currentEnvironmentNativeObject =
           await channel.invokeMethod('currentAuthorisation', params);
@@ -103,8 +69,7 @@ class Readersdk2 {
     }
   }
 
-  static Future<String> startCheckout(
-      CheckoutParameters checkoutParams) async {
+  static Future<String> startCheckout(CheckoutParameters checkoutParams) async {
     try {
       var params = <String, dynamic>{
         'checkoutParams': _standardSerializers.serializeWith(
@@ -115,12 +80,11 @@ class Readersdk2 {
       debugPrint('Result from native parameter payment : $params');
 
       return checkoutResultNativeObject;
-      } on PlatformException catch (ex) {
+    } on PlatformException catch (ex) {
       throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
           ex.details['debugMessage']);
     }
   }
-
 }
 
 class ReaderSdk2Exception implements Exception {

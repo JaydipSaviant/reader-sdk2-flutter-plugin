@@ -21,52 +21,27 @@ import io.flutter.plugin.common.MethodChannel.Result
 
 /** Readersdk2Plugin */
 class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///89[] 3
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
+
     private lateinit var channel: MethodChannel
     private var currentActivity: Activity? = null
 
     lateinit var authorisedModule: AuthorizeModule
     private var paymentModule: PaymentModule = PaymentModule()
     private var viewModel: ChargeViewModel? = null
-    private var authorizeActivity: AuthorizeActivity = AuthorizeActivity()
     private lateinit var contextReader: Context
 
     private var isAuthorize = false
-    var currentAuthentication: String = "Production"
+    private var currentAuthentication: String = "Production"
+    private var currentAccessToken: String =
+        "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW"
+    private var currentLocationId: String = "LBBSYN1QKHJSY"
 
     private var paymentManager: PaymentManager? = null
 
+    private var authorizeActivity = AuthorizeActivity()
+
     override fun onMethodCall(call: MethodCall, @NonNull result: Result) {
         when (call.method) {
-
-//            "currentEnv" -> {
-//                 currentAuthentication = call.argument<String>("envPrams").toString()
-//                Log.d("TAG", "onMethodCall--->: $currentAuthentication")
-//                autorizationInit(currentActivity!!.applicationContext)
-//                result.success(currentAuthentication)
-//            }
-
-//            "isAuthorized" -> {
-//                Log.d("TAG", "onMethodCall---> invoked 35")
-//                Log.d("TAG", "onMethodCall---> isAuthorized 35: $result")
-//
-//                isAuthorize = authorisedModule.isAuthorized()
-//                if (!isAuthorize){
-//                    isAuthorize =  authorisedModule.isAuthorized()
-//                    Log.d("TAG", "onMethodCall---> isAuthorized 47: $isAuthorize")
-//                }
-//
-//                Log.d("TAG", "onMethodCall---> isAuthorized 123: $isAuthorize")
-//                result.success(isAuthorize)
-//            }
-            "mockReaderUI" -> {
-                val mockReader = authorisedModule.isMockReaderUI()
-                Log.d("TAG", "onMethodCall: mockreader = $mockReader")
-                result.success(mockReader)
-            }
 
             "isAuthorizationInProgress" -> {
                 val isAuthorizationInProgress = authorisedModule.isAuthorizationInProgress()
@@ -86,24 +61,35 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             "currentAuthorisation" -> {
                 currentAuthentication = call.argument<String>("currentEnvironment").toString()
-                autorizationInit(currentActivity!!.applicationContext)
+                currentAccessToken = call.argument<String>("selectedAccessToken").toString()
+                currentLocationId = call.argument<String>("selectedLocationId").toString()
+//                var sharedPreference = SharedPreference()
+//                sharedPreference.setData(contextReader, currentAuthentication)
+//                var c = sharedPreference.getData(contextReader)
+//
+//                Log.d("TAG", "onMethodCall:$c ")
+                authorizationInit(
+                    currentActivity!!.applicationContext, currentAccessToken, currentLocationId
+                )
                 val currentEnvironments =
                     authorisedModule.currentEnvironment(currentAuthentication, contextReader)
+                setAuth(currentAccessToken, currentLocationId)
                 result.success(currentEnvironments)
             }
 
             "startCheckout" -> {
                 val checkoutParams: HashMap<String, Any>? = call.argument("checkoutParams")
                 var resultPayment = paymentModule.startCheckout(
-                    checkoutParams,
-                    result,
-                    paymentManager!!,
-                    viewModel!!,
-                    contextReader
+                    checkoutParams, result, paymentManager!!, viewModel!!, contextReader
                 )
                 Log.d("TAG", "onMethodCall--->: $checkoutParams")
-                Log.d("TAG", "startPayment: 104 - $resultPayment")
                 result.success(resultPayment)
+            }
+
+            "mockReaderUI" -> {
+                Log.d("TAG", "onMethodCall--->: 841 $isAuthorize")
+                //mockReaderUIShow()
+                //result.success(resultPayment)
             }
 
             else -> {
@@ -116,7 +102,6 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         //onAttachedToEngine(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger)
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "readersdk2")
-        Log.d("TAG", "onAttachedToEngine: $channel")
         channel.setMethodCallHandler(this)
 
     }
@@ -127,58 +112,77 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        Log.d("TAG", "world 94:--> ")
         setContextForModules(binding.activity)
     }
 
+    fun setAuth(currentAccessToken: String, currentLocationId: String) {
+        mockReaderUIShow(currentAccessToken, currentLocationId)
+        Log.d("TAG", "authorize: authorized callback ref it 123254235235235")
+//        ReaderSdk.authorizationManager().addAuthorizeCallback {
+//            Log.d("TAG", "authorize: authorized callback ref it 12 = $it")
+//            authorizeActivity.onAuthorizeResult(it)
+//        }
+    }
+
     fun setContextForModules(activity: Activity) {
-        Log.d("TAG", "world 123:--> ")
         currentActivity = activity
         Log.d("TAG", "world 125:--> $currentActivity")
-        //autorizationInit(currentActivity!!.applicationContext)
+        //authorizationInit(currentActivity!!.applicationContext)
     }
 
 
-    override fun onDetachedFromActivityForConfigChanges() {
-
-    }
+    override fun onDetachedFromActivityForConfigChanges() {}
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         setContextForModules(binding.activity)
     }
 
-    override fun onDetachedFromActivity() {
+    override fun onDetachedFromActivity() {}
 
-    }
-
-    private fun autorizationInit(context: Context) {
+    private fun authorizationInit(
+        context: Context,
+        currentAccessToken: String,
+        currentLocationId: String,
+    ) {
         contextReader = context
         val appId = OAuthHelper.getAppId(context, currentAuthentication)
-        ReaderSdk.initialize(appId, currentActivity!!.application)
+        ReaderSdk.initialize("sandbox-sq0idb-7QT2EriOdn1Gz8jw7e2KSw", currentActivity!!.application)
         authorisedModule = AuthorizeModule()
         if (::authorisedModule.isInitialized) {
             // Use authorisedModule
         } else {
             // Handle the case where the property is not initialized
         }
+        authorizeActivity = AuthorizeActivity()
         paymentManager = ReaderSdk.paymentManager()
         viewModel = ChargeViewModel()
-        isAuthorize = authorisedModule.isAuthorized()
+        isAuthorize = authorisedModule.isAuthorized(currentAccessToken, currentLocationId)
         Log.d("TAG", "authorizationInit: 1 = $isAuthorize")
-        if (!isAuthorize) {
-            isAuthorize = authorisedModule.isAuthorized()
-            Log.d("TAG", "authorizationInit: 2 = $isAuthorize")
+
+        authorisedModule.authorizationManager!!.addAuthorizeCallback {
+            authorizeActivity.onAuthorizeResult(it, context)
+            Log.d("TAG", "authorizationInit: 17000000  ${it}")
+            //MockReaderUI.show()
         }
-        if (isAuthorize) {
-            Log.d("TAG", "authorizationInit: mock reader sdk 121 = $isAuthorize")
-            if (ReaderSdk.isSandboxEnvironment()) {
-                Log.d(
-                    "TAG",
-                    "authorizationInit: mock reader sdk = ${ReaderSdk.isSandboxEnvironment()}"
-                )
-                MockReaderUI.show()
-                Log.d("TAG", "authorizationInit: mock reader show 99898 ")
-            }
+
+
+    }
+
+    private fun mockReaderUIShow(currentAccessToken: String, currentLocationId: String) {
+        Log.d("TAG", "isAuthorized: second 45 = $currentAccessToken")
+        Log.d("TAG", "isAuthorized: second 34 = $currentLocationId")
+//        ReaderSdk.authorizationManager().deauthorize()
+//        Log.d("TAG", "isAuthorized: second 1090910910")
+//        MockReaderUI.hide()
+        if (!authorisedModule.isAuthorized(currentAccessToken, currentLocationId)) {
+            Log.d("TAG", "isAuthorized: second 999 =")
+            ReaderSdk.authorizationManager().authorize(
+                currentAccessToken, currentLocationId
+            )
+            Log.d("TAG", "isAuthorized: second 9876 =")
+        }
+        if (ReaderSdk.isSandboxEnvironment()) {
+            MockReaderUI.show()
         }
     }
 }

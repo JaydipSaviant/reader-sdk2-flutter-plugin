@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:readersdk2/readersdk2.dart';
+import 'package:readersdk2_example/api_intregration/shared_prf.dart';
+import 'package:readersdk2_example/const/global_variable.dart';
 import 'package:readersdk2_example/const/static_string.dart';
 import 'package:readersdk2_example/screen/add_card_reader_screen.dart';
 import 'package:readersdk2_example/screen/authorize_screen.dart';
@@ -22,95 +25,108 @@ class _PermissionScreenState extends State<PermissionScreen> {
   bool bluetoothPermission = false;
   bool storagePermission = false;
 
+  bool isLoading = false;
+
   @override
   void initState() {
     super.initState();
     requestPermissions();
+    checkLoading();
+  }
+
+  checkLoading() {
+    Future.delayed(Duration(seconds: 5), () {
+      setState(() {
+        isLoading = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Spacer(
-              flex: 2,
-            ),
-            PermissionContainer(
-              title: StaticString.microPhone,
-              subtitle: StaticString.subtitleMicroPhone,
-              isEnable: microPhonPermission,
-              onPressed: microPhonPermission
-                  ? null
-                  : () {
-                      selectPermission(permissionNumber: 1);
-                    },
-            ),
-            PermissionContainer(
-              title: StaticString.location,
-              subtitle: StaticString.subtitleLocation,
-              isEnable: locationPermission,
-              onPressed: locationPermission
-                  ? null
-                  : () {
-                      selectPermission(permissionNumber: 2);
-                    },
-            ),
-            PermissionContainer(
-              title: StaticString.bluetooth,
-              subtitle: StaticString.subtitlebluetooth,
-              isEnable: bluetoothPermission,
-              onPressed: bluetoothPermission
-                  ? null
-                  : () {
-                      selectPermission(permissionNumber: 3);
-                    },
-            ),
-            PermissionContainer(
-              title: StaticString.storage,
-              subtitle: StaticString.subtitleStorage,
-              isEnable: storagePermission,
-              onPressed: storagePermission
-                  ? null
-                  : () async {
-                      selectPermission(permissionNumber: 4);
-                    },
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: SQRaisedButton(
-                text: StaticString.startTaking,
-                onPressed: () {
-                  if (!microPhonPermission) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(StaticString.selectMicroPhone)));
-                  } else if (!locationPermission) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(StaticString.selectLocation)));
-                  } else {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return AddCardReaderScreen();
-                        //return MockReaderScreen();
+      body: !isLoading
+          ? CircularProgressIndicator()
+          : SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Spacer(
+                    flex: 2,
+                  ),
+                  PermissionContainer(
+                    title: StaticString.microPhone,
+                    subtitle: StaticString.subtitleMicroPhone,
+                    isEnable: microPhonPermission,
+                    onPressed: microPhonPermission
+                        ? null
+                        : () {
+                            selectPermission(permissionNumber: 1);
+                          },
+                  ),
+                  PermissionContainer(
+                    title: StaticString.location,
+                    subtitle: StaticString.subtitleLocation,
+                    isEnable: locationPermission,
+                    onPressed: locationPermission
+                        ? null
+                        : () {
+                            selectPermission(permissionNumber: 2);
+                          },
+                  ),
+                  PermissionContainer(
+                    title: StaticString.bluetooth,
+                    subtitle: StaticString.subtitlebluetooth,
+                    isEnable: bluetoothPermission,
+                    onPressed: bluetoothPermission
+                        ? null
+                        : () {
+                            selectPermission(permissionNumber: 3);
+                          },
+                  ),
+                  PermissionContainer(
+                    title: StaticString.storage,
+                    subtitle: StaticString.subtitleStorage,
+                    isEnable: storagePermission,
+                    onPressed: storagePermission
+                        ? null
+                        : () async {
+                            selectPermission(permissionNumber: 4);
+                          },
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: SQRaisedButton(
+                      text: StaticString.startTaking,
+                      onPressed: () {
+                        if (!microPhonPermission) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(StaticString.selectMicroPhone)));
+                        } else if (!locationPermission) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(StaticString.selectLocation)));
+                        } else {
+                          Navigator.push(context, MaterialPageRoute(
+                            builder: (context) {
+                              return AddCardReaderScreen();
+                              //return MockReaderScreen();
+                            },
+                          ));
+                        }
                       },
-                    ));
-                  }
-                },
+                    ),
+                  ),
+                  Spacer(),
+                  SizedBox(
+                    height: 50,
+                  ),
+                ],
               ),
             ),
-            Spacer(),
-            SizedBox(
-              height: 50,
-            ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -140,10 +156,18 @@ class _PermissionScreenState extends State<PermissionScreen> {
         storagePermission = true;
       });
     }
-    // if (!statusStorage.isGranted ||
-    //     !statusBluetooth.isGranted ||
-    //     !statusLocation.isGranted ||
-    //     !statusMicrophone.isGranted) {}
+    if (!statusStorage.isGranted ||
+        !statusBluetooth.isGranted ||
+        !statusLocation.isGranted ||
+        !statusMicrophone.isGranted) {
+      setState(() {
+        GlobalSingleton().isCompleteAuthorized = true;
+        SharedPref().saveBool(
+            "isCompleteAuthorized", GlobalSingleton().isCompleteAuthorized);
+        debugPrint("per completed = ${GlobalSingleton().isCompleteAuthorized}");
+        debugPrint("permission was granted");
+      });
+    }
   }
 
   selectPermission({required int permissionNumber}) {

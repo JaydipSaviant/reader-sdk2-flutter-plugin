@@ -15,7 +15,7 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   built_value: ^8.8.1
   built_collection: ^5.1.1
-  
+  flutter_credit_card: ^4.0.1
 
 dev_dependencies:
   flutter_test:

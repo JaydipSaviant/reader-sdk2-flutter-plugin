@@ -11,7 +11,7 @@ class StaticString {
       "Some squar reader use the Photos to communicate payment card data to your device";
   static String subtitleLocation =
       "Squere needs to Know Where transactions take place to reduce risk and minimize payment disputes";
-  static String startTaking = "START TAKING PAYMENTS";
+  static String startTaking = "PAYMENTS";
   static String selectMicroPhone = "Select Microphone";
   static String selectLocation = "Select Location";
   static String squreReaders = "Squre Readers";
@@ -36,6 +36,5 @@ class StaticString {
   static String pay = "Pay";
   static String authoriseWithOauth = "Authorise with oAuth";
   static String charges = "charge";
-  static String tapMockReader =
-      "Tap to MockReader";
+  static String tapMockReader = "Tap to MockReader";
 }

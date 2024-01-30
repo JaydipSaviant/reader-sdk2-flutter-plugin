@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
 import 'package:readersdk2_example/screen/add_credit_card_screen.dart';
+import 'package:readersdk2_example/screen/mock_reader_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/square_logo.dart';
 
@@ -76,6 +77,19 @@ class _ChargesStartedScreenState extends State<ChargesStartedScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const AddCreditCardScreen(),
+                    ));
+              },
+            ),
+          ]),
+          SQButtonContainer(buttons: [
+            SQRaisedButton(
+              text: StaticString.squreReaders,
+            //  icon: Icons.arrow_forward_ios,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MockReaderScreen(),
                     ));
               },
             ),

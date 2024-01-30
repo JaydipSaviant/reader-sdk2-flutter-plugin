@@ -11,6 +11,8 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
@@ -44,7 +46,7 @@ class AuthorizeActivity : AppCompatActivity() {
 
     private var authData: Uri? = null
     private var authorizationManager: AuthorizationManager? = null
-    private lateinit var callbackRef: CallbackReference
+     lateinit var callbackRef: CallbackReference
     private lateinit var prefs: SharedPreferences
     lateinit var currentEnvironment: Environment
     private lateinit var environments: List<Environment>
@@ -103,6 +105,7 @@ class AuthorizeActivity : AppCompatActivity() {
 
     fun authorizeWithSandbox(authorizationMan: AuthorizationManager): Boolean {
 
+
         return OAuthHelper.authorizeIfPossible(
             authorizationMan, Uri.parse(
                 "mockurl://fake?" +
@@ -136,16 +139,12 @@ class AuthorizeActivity : AppCompatActivity() {
 //        authorizationMan.authorize(currentEnvironment.authToken, currentEnvironment.locationId)
     }
 
-    fun onAuthorizeResult(result: AuthorizeResult) {
-        Log.d(TAG, "onAuthorizeResult: $result ")
+    fun onAuthorizeResult(result: AuthorizeResult, context: Context) {
+        Log.d(TAG, "onAuthorizeResult: 141 $result ")
         when (result) {
             is Success -> {
-                prefs.edit().apply {
-                    putString(PREFS_AUTH_LOCATION_NAME, result.value.name)
-                    putString(PREFS_AUTH_LOCATION_ID, result.value.locationId)
-                    apply()
-                }
-                finishWithAuthorizedResult()
+                Log.d(TAG, "onAuthorizeResult: 0000000 == ${result.value}")
+                finishWithAuthorizedResult(context)
             }
 
             is Failure -> {
@@ -173,8 +172,8 @@ class AuthorizeActivity : AppCompatActivity() {
                 failure.errorCode.toString() + ": " + failure.debugCode + ", " + failure.debugMessage
             )
         }
-        AlertDialog.Builder(this).setTitle("Error").setMessage(dialogMessage)
-            .setNeutralButton("ok") { _, _ -> authData = null }.show()
+//        AlertDialog.Builder(this).setTitle("Error").setMessage(dialogMessage)
+//            .setNeutralButton("ok") { _, _ -> authData = null }.show()
     }
 
     fun firstTimeCreateInten(context: Context) {
@@ -193,15 +192,17 @@ class AuthorizeActivity : AppCompatActivity() {
         Log.d(TAG, "firstTimeCreateInten: 236 ${context.applicationContext}")
     }
 
-    fun finishWithAuthorizedResult() {
+    fun finishWithAuthorizedResult(context: Context) {
+        Log.d(TAG, "finishWithAuthorizedResult: 198888")
         // Show MockReader UI if we're in Sandbox and logged in
         if (ReaderSdk.isSandboxEnvironment()) {
             MockReaderUI.show()
+            Log.d(TAG, "finishWithAuthorizedResult: 1988888989898989")
         }
 
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+//        val intent = Intent(context, MainActivity::class.java)
+//        startActivity(intent)
+//     finish()
     }
 
     private fun restartApp(context: Context) {

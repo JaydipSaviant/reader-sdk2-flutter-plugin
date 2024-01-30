@@ -5,6 +5,7 @@ import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
 import 'package:readersdk2_example/screen/permission_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
+import 'package:readersdk2_example/widgets/network_button.dart';
 
 class AddAuthorisedScreen extends StatefulWidget {
   const AddAuthorisedScreen({super.key});
@@ -15,7 +16,10 @@ class AddAuthorisedScreen extends StatefulWidget {
 
 class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
   String selectedOption = "Production";
-  var isCurrentEnv;
+  String selectedAccessToken =
+      "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW";
+  String selectedLocationId = "LBBSYN1QKHJSY";
+  //var isCurrentEnv;
 
   // void checkAuthorisedAndNavigate() async {
   //   var isAuthorized = await Readersdk2.callNativeMethod;
@@ -66,7 +70,9 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
               onChanged: (value) {
                 setState(() {
                   selectedOption = value!;
-                  // Readersdk2.currentEnvirment(selectedOption);
+                  selectedAccessToken =
+                      "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW";
+                  selectedLocationId = "LBBSYN1QKHJSY";
                 });
               },
             ),
@@ -82,7 +88,9 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
               onChanged: (value) {
                 setState(() {
                   selectedOption = value!;
-                  // Readersdk2.currentEnvirment(selectedOption);
+                  selectedAccessToken =
+                      "EAAAEJe7nhcIDV2cXO1edJafX0ZNFQk42lqxVZjYn1kc3Tg7lN-P32GlFey5OepV";
+                  selectedLocationId = "LWTCANRWNHMF0";
                 });
               },
             ),
@@ -93,8 +101,9 @@ class _AddAuthorisedScreenState extends State<AddAuthorisedScreen> {
               foregroundColor: Colors.white,
               text: StaticString.authoriseWithOauth.toUpperCase(),
               onPressed: () {
-                //checkAuthorisedAndNavigate();
-                Readersdk2.currentEnv(selectedOption).then((value) {
+                Readersdk2.currentEnv(
+                        selectedOption, selectedAccessToken, selectedLocationId)
+                    .then((value) {
                   debugPrint("cureent enviorment = $value");
                   if (value) {
                     Navigator.push(context, MaterialPageRoute(

@@ -1,3 +1,50 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:readersdk2_example/api_intregration/shared_prf.dart';
+import 'package:readersdk2_example/const/global_variable.dart';
+import 'package:readersdk2_example/screen/add_authorise_screen.dart';
+import 'package:readersdk2_example/screen/add_card_reader_screen.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool isCompletedAuth = false;
+
+  getAuth() async {
+    isCompletedAuth = await SharedPref().getBool("isCompleteAuthorized");
+    Timer(
+        Duration(seconds: 5),
+        () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => isCompletedAuth
+                    ? const AddCardReaderScreen()
+                    : const AddAuthorisedScreen())));
+  }
+
+  void initState() {
+    super.initState();
+    getAuth();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+          color: Colors.blue,
+          child: FlutterLogo(size: MediaQuery.of(context).size.height)),
+    );
+  }
+}
+
+
+
 // /*
 // Copyright 2022 Square Inc.
 

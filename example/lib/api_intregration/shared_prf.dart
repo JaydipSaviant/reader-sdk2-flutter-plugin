@@ -6,15 +6,15 @@ class SharedPref {
   factory SharedPref() {
     return instance;
   }
-  //signup response save
-  // signUpResponseSave(value) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   prefs.setString("SignupData", value);
-  // }
-  // /// Get signup response
-  // getUserSignupResponse() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String userSignupResponse = prefs.getString("SignupData") ?? "";
-  //   return userSignupResponse;
-  // }
+
+ Future<void> saveBool(String key, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(key, value);
+  }
+
+  // Get a boolean value from shared preferences
+   Future<bool> getBool(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(key) ?? false;
+  }
 }
