@@ -5,7 +5,7 @@ import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/api_intregration/shared_prf.dart';
 import 'package:readersdk2_example/const/global_variable.dart';
 import 'package:readersdk2_example/const/static_string.dart';
-import 'package:readersdk2_example/screen/add_card_reader_screen.dart';
+import 'package:readersdk2_example/final_screen/home_screen.dart';
 import 'package:readersdk2_example/screen/authorize_screen.dart';
 import 'package:readersdk2_example/screen/mock_reader_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
@@ -112,7 +112,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                         } else {
                           Navigator.push(context, MaterialPageRoute(
                             builder: (context) {
-                              return AddCardReaderScreen();
+                              return HomePage();
+                              //AddCardReaderScreen();
                               //return MockReaderScreen();
                             },
                           ));

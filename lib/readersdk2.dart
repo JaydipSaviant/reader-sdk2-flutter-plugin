@@ -51,7 +51,8 @@ class Readersdk2 {
     }
   }
 
-  static Future<bool> currentEnv(String currentEnvironment, String selectedAccessToken, String selectedLocationId) async {
+  static Future<bool> currentEnv(String currentEnvironment,
+      String selectedAccessToken, String selectedLocationId) async {
     try {
       var params = <String, dynamic>{
         'currentEnvironment': currentEnvironment,
@@ -78,8 +79,21 @@ class Readersdk2 {
       var checkoutResultNativeObject =
           await channel.invokeMethod('startCheckout', params);
       debugPrint('Result from native parameter payment : $params');
+      debugPrint(
+          'Result from native parameter checkoutResultNativeObject : $checkoutResultNativeObject');
 
       return checkoutResultNativeObject;
+    } on PlatformException catch (ex) {
+      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
+          ex.details['debugMessage']);
+    }
+  }
+
+  static Future<void> get directAuthorised async {
+    try {
+      var directAuth = await channel.invokeMethod('directMockReaderUI');
+      debugPrint("directAuth = $directAuth");
+      return directAuth;
     } on PlatformException catch (ex) {
       throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
           ex.details['debugMessage']);

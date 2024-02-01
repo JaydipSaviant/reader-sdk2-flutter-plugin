@@ -249,17 +249,17 @@ class _$MoneySerializer implements StructuredSerializer<Money> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'amount':
           result.amount = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int))! as int;
           break;
         case 'currencyCode':
           result.currencyCode = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
       }
     }
@@ -310,29 +310,29 @@ class _$LocationSerializer implements StructuredSerializer<Location> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'currencyCode':
           result.currencyCode = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'businessName':
           result.businessName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'name':
           result.name = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'locationId':
           result.locationId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'isCardProcessingActivated':
           result.isCardProcessingActivated = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool))! as bool;
           break;
         case 'maximumCardPaymentAmountMoney':
           result.maximumCardPaymentAmountMoney.replace(serializers.deserialize(
@@ -401,25 +401,25 @@ class _$CheckoutResultSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'transactionId':
           result.transactionId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'transactionClientId':
           result.transactionClientId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'locationId':
           result.locationId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'createdAt':
           result.createdAt = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'totalMoney':
           result.totalMoney.replace(serializers.deserialize(value,
@@ -433,7 +433,7 @@ class _$CheckoutResultSerializer
           result.tenders.replace(serializers.deserialize(value,
                   specifiedType: const FullType(
                       BuiltList, const [const FullType(Tender)]))!
-              as BuiltList<Object>);
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -514,7 +514,7 @@ class _$TenderSerializer implements StructuredSerializer<Tender> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -528,15 +528,15 @@ class _$TenderSerializer implements StructuredSerializer<Tender> {
           break;
         case 'type':
           result.type = serializers.deserialize(value,
-              specifiedType: const FullType(TenderType)) as TenderType;
+              specifiedType: const FullType(TenderType))! as TenderType;
           break;
         case 'tenderId':
           result.tenderId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'createdAt':
           result.createdAt = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'cardDetails':
           result.cardDetails.replace(serializers.deserialize(value,
@@ -581,7 +581,7 @@ class _$CashDetailsSerializer implements StructuredSerializer<CashDetails> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -629,7 +629,8 @@ class _$EntryMethodSerializer implements PrimitiveSerializer<EntryMethod> {
   @override
   EntryMethod deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
-      EntryMethod.valueOf(_fromWire[serialized] ?? serialized as String);
+      EntryMethod.valueOf(
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$CardDetailsSerializer implements StructuredSerializer<CardDetails> {
@@ -659,13 +660,13 @@ class _$CardDetailsSerializer implements StructuredSerializer<CardDetails> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'entryMethod':
           result.entryMethod = serializers.deserialize(value,
-              specifiedType: const FullType(EntryMethod)) as EntryMethod;
+              specifiedType: const FullType(EntryMethod))! as EntryMethod;
           break;
         case 'card':
           result.card.replace(serializers.deserialize(value,
@@ -680,7 +681,7 @@ class _$CardDetailsSerializer implements StructuredSerializer<CardDetails> {
 
 class _$BrandSerializer implements PrimitiveSerializer<Brand> {
   static const Map<String, Object> _toWire = const <String, Object>{
-    'otherBrand': 'OTHER_BRAND',
+    'otherBrand': '',
     'visa': 'VISA',
     'mastercard': 'MASTERCARD',
     'americanExpress': 'AMERICAN_EXPRESS',
@@ -693,7 +694,7 @@ class _$BrandSerializer implements PrimitiveSerializer<Brand> {
     'eftpos': 'EFTPOS',
   };
   static const Map<Object, String> _fromWire = const <Object, String>{
-    'OTHER_BRAND': 'otherBrand',
+    '': 'otherBrand',
     'VISA': 'visa',
     'MASTERCARD': 'mastercard',
     'AMERICAN_EXPRESS': 'americanExpress',
@@ -719,7 +720,8 @@ class _$BrandSerializer implements PrimitiveSerializer<Brand> {
   @override
   Brand deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
-      Brand.valueOf(_fromWire[serialized] ?? serialized as String);
+      Brand.valueOf(
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$CardSerializer implements StructuredSerializer<Card> {
@@ -775,33 +777,33 @@ class _$CardSerializer implements StructuredSerializer<Card> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'brand':
           result.brand = serializers.deserialize(value,
-              specifiedType: const FullType(Brand)) as Brand;
+              specifiedType: const FullType(Brand))! as Brand;
           break;
         case 'lastFourDigits':
           result.lastFourDigits = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String))! as String;
           break;
         case 'expirationMonth':
           result.expirationMonth = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'expirationYear':
           result.expirationYear = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int;
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'id':
           result.id = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'cardholderName':
           result.cardholderName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
       }
     }
@@ -837,7 +839,7 @@ class _$AdditionalPaymentTypeSerializer
   AdditionalPaymentType deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
       AdditionalPaymentType.valueOf(
-          _fromWire[serialized] ?? serialized as String);
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$CheckoutParametersSerializer
@@ -918,7 +920,7 @@ class _$CheckoutParametersSerializer
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
@@ -928,29 +930,29 @@ class _$CheckoutParametersSerializer
           break;
         case 'skipReceipt':
           result.skipReceipt = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'collectSignature':
           result.collectSignature = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'allowSplitTender':
           result.allowSplitTender = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'delayCapture':
           result.delayCapture = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'note':
           result.note = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+              specifiedType: const FullType(String)) as String?;
           break;
         case 'additionalPaymentTypes':
           result.additionalPaymentTypes.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(AdditionalPaymentType)
-              ]))! as BuiltList<Object>);
+              ]))! as BuiltList<Object?>);
           break;
         case 'tipSettings':
           result.tipSettings.replace(serializers.deserialize(value,
@@ -1006,23 +1008,23 @@ class _$TipSettingsSerializer implements StructuredSerializer<TipSettings> {
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
-      final key = iterator.current as String;
+      final key = iterator.current! as String;
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
         case 'showCustomTipField':
           result.showCustomTipField = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'showSeparateTipScreen':
           result.showSeparateTipScreen = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'tipPercentages':
           result.tipPercentages.replace(serializers.deserialize(value,
                   specifiedType:
                       const FullType(BuiltList, const [const FullType(int)]))!
-              as BuiltList<Object>);
+              as BuiltList<Object?>);
           break;
       }
     }
@@ -1072,7 +1074,8 @@ class _$ErrorCodeSerializer implements PrimitiveSerializer<ErrorCode> {
   @override
   ErrorCode deserialize(Serializers serializers, Object serialized,
           {FullType specifiedType = FullType.unspecified}) =>
-      ErrorCode.valueOf(_fromWire[serialized] ?? serialized as String);
+      ErrorCode.valueOf(
+          _fromWire[serialized] ?? (serialized is String ? serialized : ''));
 }
 
 class _$Money extends Money {
@@ -1082,10 +1085,10 @@ class _$Money extends Money {
   final String? currencyCode;
 
   factory _$Money([void Function(MoneyBuilder)? updates]) =>
-      (new MoneyBuilder()..update(updates)).build();
+      (new MoneyBuilder()..update(updates))._build();
 
   _$Money._({required this.amount, this.currencyCode}) : super._() {
-    BuiltValueNullFieldError.checkNotNull(amount, 'Money', 'amount');
+    BuiltValueNullFieldError.checkNotNull(amount, r'Money', 'amount');
   }
 
   @override
@@ -1105,12 +1108,16 @@ class _$Money extends Money {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, amount.hashCode), currencyCode.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, amount.hashCode);
+    _$hash = $jc(_$hash, currencyCode.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Money')
+    return (newBuiltValueToStringHelper(r'Money')
           ..add('amount', amount)
           ..add('currencyCode', currencyCode))
         .toString();
@@ -1152,11 +1159,13 @@ class MoneyBuilder implements Builder<Money, MoneyBuilder> {
   }
 
   @override
-  _$Money build() {
+  Money build() => _build();
+
+  _$Money _build() {
     final _$result = _$v ??
         new _$Money._(
             amount: BuiltValueNullFieldError.checkNotNull(
-                amount, 'Money', 'amount'),
+                amount, r'Money', 'amount'),
             currencyCode: currencyCode);
     replace(_$result);
     return _$result;
@@ -1180,7 +1189,7 @@ class _$Location extends Location {
   final Money minimumCardPaymentAmountMoney;
 
   factory _$Location([void Function(LocationBuilder)? updates]) =>
-      (new LocationBuilder()..update(updates)).build();
+      (new LocationBuilder()..update(updates))._build();
 
   _$Location._(
       {required this.currencyCode,
@@ -1192,17 +1201,18 @@ class _$Location extends Location {
       required this.minimumCardPaymentAmountMoney})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        currencyCode, 'Location', 'currencyCode');
+        currencyCode, r'Location', 'currencyCode');
     BuiltValueNullFieldError.checkNotNull(
-        businessName, 'Location', 'businessName');
-    BuiltValueNullFieldError.checkNotNull(name, 'Location', 'name');
-    BuiltValueNullFieldError.checkNotNull(locationId, 'Location', 'locationId');
+        businessName, r'Location', 'businessName');
+    BuiltValueNullFieldError.checkNotNull(name, r'Location', 'name');
     BuiltValueNullFieldError.checkNotNull(
-        isCardProcessingActivated, 'Location', 'isCardProcessingActivated');
+        locationId, r'Location', 'locationId');
+    BuiltValueNullFieldError.checkNotNull(
+        isCardProcessingActivated, r'Location', 'isCardProcessingActivated');
     BuiltValueNullFieldError.checkNotNull(maximumCardPaymentAmountMoney,
-        'Location', 'maximumCardPaymentAmountMoney');
+        r'Location', 'maximumCardPaymentAmountMoney');
     BuiltValueNullFieldError.checkNotNull(minimumCardPaymentAmountMoney,
-        'Location', 'minimumCardPaymentAmountMoney');
+        r'Location', 'minimumCardPaymentAmountMoney');
   }
 
   @override
@@ -1227,23 +1237,21 @@ class _$Location extends Location {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc($jc(0, currencyCode.hashCode),
-                            businessName.hashCode),
-                        name.hashCode),
-                    locationId.hashCode),
-                isCardProcessingActivated.hashCode),
-            maximumCardPaymentAmountMoney.hashCode),
-        minimumCardPaymentAmountMoney.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, currencyCode.hashCode);
+    _$hash = $jc(_$hash, businessName.hashCode);
+    _$hash = $jc(_$hash, name.hashCode);
+    _$hash = $jc(_$hash, locationId.hashCode);
+    _$hash = $jc(_$hash, isCardProcessingActivated.hashCode);
+    _$hash = $jc(_$hash, maximumCardPaymentAmountMoney.hashCode);
+    _$hash = $jc(_$hash, minimumCardPaymentAmountMoney.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Location')
+    return (newBuiltValueToStringHelper(r'Location')
           ..add('currencyCode', currencyCode)
           ..add('businessName', businessName)
           ..add('name', name)
@@ -1324,22 +1332,24 @@ class LocationBuilder implements Builder<Location, LocationBuilder> {
   }
 
   @override
-  _$Location build() {
+  Location build() => _build();
+
+  _$Location _build() {
     _$Location _$result;
     try {
       _$result = _$v ??
           new _$Location._(
               currencyCode: BuiltValueNullFieldError.checkNotNull(
-                  currencyCode, 'Location', 'currencyCode'),
+                  currencyCode, r'Location', 'currencyCode'),
               businessName: BuiltValueNullFieldError.checkNotNull(
-                  businessName, 'Location', 'businessName'),
+                  businessName, r'Location', 'businessName'),
               name: BuiltValueNullFieldError.checkNotNull(
-                  name, 'Location', 'name'),
+                  name, r'Location', 'name'),
               locationId: BuiltValueNullFieldError.checkNotNull(
-                  locationId, 'Location', 'locationId'),
+                  locationId, r'Location', 'locationId'),
               isCardProcessingActivated: BuiltValueNullFieldError.checkNotNull(
                   isCardProcessingActivated,
-                  'Location',
+                  r'Location',
                   'isCardProcessingActivated'),
               maximumCardPaymentAmountMoney:
                   maximumCardPaymentAmountMoney.build(),
@@ -1354,7 +1364,7 @@ class LocationBuilder implements Builder<Location, LocationBuilder> {
         minimumCardPaymentAmountMoney.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Location', _$failedField, e.toString());
+            r'Location', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1380,7 +1390,7 @@ class _$CheckoutResult extends CheckoutResult {
   final BuiltList<Tender> tenders;
 
   factory _$CheckoutResult([void Function(CheckoutResultBuilder)? updates]) =>
-      (new CheckoutResultBuilder()..update(updates)).build();
+      (new CheckoutResultBuilder()..update(updates))._build();
 
   _$CheckoutResult._(
       {this.transactionId,
@@ -1392,16 +1402,17 @@ class _$CheckoutResult extends CheckoutResult {
       required this.tenders})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        transactionClientId, 'CheckoutResult', 'transactionClientId');
+        transactionClientId, r'CheckoutResult', 'transactionClientId');
     BuiltValueNullFieldError.checkNotNull(
-        locationId, 'CheckoutResult', 'locationId');
+        locationId, r'CheckoutResult', 'locationId');
     BuiltValueNullFieldError.checkNotNull(
-        createdAt, 'CheckoutResult', 'createdAt');
+        createdAt, r'CheckoutResult', 'createdAt');
     BuiltValueNullFieldError.checkNotNull(
-        totalMoney, 'CheckoutResult', 'totalMoney');
+        totalMoney, r'CheckoutResult', 'totalMoney');
     BuiltValueNullFieldError.checkNotNull(
-        totalTipMoney, 'CheckoutResult', 'totalTipMoney');
-    BuiltValueNullFieldError.checkNotNull(tenders, 'CheckoutResult', 'tenders');
+        totalTipMoney, r'CheckoutResult', 'totalTipMoney');
+    BuiltValueNullFieldError.checkNotNull(
+        tenders, r'CheckoutResult', 'tenders');
   }
 
   @override
@@ -1427,23 +1438,21 @@ class _$CheckoutResult extends CheckoutResult {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc($jc(0, transactionId.hashCode),
-                            transactionClientId.hashCode),
-                        locationId.hashCode),
-                    createdAt.hashCode),
-                totalMoney.hashCode),
-            totalTipMoney.hashCode),
-        tenders.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, transactionId.hashCode);
+    _$hash = $jc(_$hash, transactionClientId.hashCode);
+    _$hash = $jc(_$hash, locationId.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, totalMoney.hashCode);
+    _$hash = $jc(_$hash, totalTipMoney.hashCode);
+    _$hash = $jc(_$hash, tenders.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CheckoutResult')
+    return (newBuiltValueToStringHelper(r'CheckoutResult')
           ..add('transactionId', transactionId)
           ..add('transactionClientId', transactionClientId)
           ..add('locationId', locationId)
@@ -1521,18 +1530,22 @@ class CheckoutResultBuilder
   }
 
   @override
-  _$CheckoutResult build() {
+  CheckoutResult build() => _build();
+
+  _$CheckoutResult _build() {
     _$CheckoutResult _$result;
     try {
       _$result = _$v ??
           new _$CheckoutResult._(
               transactionId: transactionId,
               transactionClientId: BuiltValueNullFieldError.checkNotNull(
-                  transactionClientId, 'CheckoutResult', 'transactionClientId'),
+                  transactionClientId,
+                  r'CheckoutResult',
+                  'transactionClientId'),
               locationId: BuiltValueNullFieldError.checkNotNull(
-                  locationId, 'CheckoutResult', 'locationId'),
+                  locationId, r'CheckoutResult', 'locationId'),
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'CheckoutResult', 'createdAt'),
+                  createdAt, r'CheckoutResult', 'createdAt'),
               totalMoney: totalMoney.build(),
               totalTipMoney: totalTipMoney.build(),
               tenders: tenders.build());
@@ -1547,7 +1560,7 @@ class CheckoutResultBuilder
         tenders.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CheckoutResult', _$failedField, e.toString());
+            r'CheckoutResult', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1573,7 +1586,7 @@ class _$Tender extends Tender {
   final CashDetails? cashDetails;
 
   factory _$Tender([void Function(TenderBuilder)? updates]) =>
-      (new TenderBuilder()..update(updates)).build();
+      (new TenderBuilder()..update(updates))._build();
 
   _$Tender._(
       {required this.totalMoney,
@@ -1584,10 +1597,10 @@ class _$Tender extends Tender {
       this.cardDetails,
       this.cashDetails})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(totalMoney, 'Tender', 'totalMoney');
-    BuiltValueNullFieldError.checkNotNull(tipMoney, 'Tender', 'tipMoney');
-    BuiltValueNullFieldError.checkNotNull(type, 'Tender', 'type');
-    BuiltValueNullFieldError.checkNotNull(createdAt, 'Tender', 'createdAt');
+    BuiltValueNullFieldError.checkNotNull(totalMoney, r'Tender', 'totalMoney');
+    BuiltValueNullFieldError.checkNotNull(tipMoney, r'Tender', 'tipMoney');
+    BuiltValueNullFieldError.checkNotNull(type, r'Tender', 'type');
+    BuiltValueNullFieldError.checkNotNull(createdAt, r'Tender', 'createdAt');
   }
 
   @override
@@ -1612,21 +1625,21 @@ class _$Tender extends Tender {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc($jc($jc(0, totalMoney.hashCode), tipMoney.hashCode),
-                        type.hashCode),
-                    tenderId.hashCode),
-                createdAt.hashCode),
-            cardDetails.hashCode),
-        cashDetails.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, totalMoney.hashCode);
+    _$hash = $jc(_$hash, tipMoney.hashCode);
+    _$hash = $jc(_$hash, type.hashCode);
+    _$hash = $jc(_$hash, tenderId.hashCode);
+    _$hash = $jc(_$hash, createdAt.hashCode);
+    _$hash = $jc(_$hash, cardDetails.hashCode);
+    _$hash = $jc(_$hash, cashDetails.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Tender')
+    return (newBuiltValueToStringHelper(r'Tender')
           ..add('totalMoney', totalMoney)
           ..add('tipMoney', tipMoney)
           ..add('type', type)
@@ -1702,18 +1715,20 @@ class TenderBuilder implements Builder<Tender, TenderBuilder> {
   }
 
   @override
-  _$Tender build() {
+  Tender build() => _build();
+
+  _$Tender _build() {
     _$Tender _$result;
     try {
       _$result = _$v ??
           new _$Tender._(
               totalMoney: totalMoney.build(),
               tipMoney: tipMoney.build(),
-              type:
-                  BuiltValueNullFieldError.checkNotNull(type, 'Tender', 'type'),
+              type: BuiltValueNullFieldError.checkNotNull(
+                  type, r'Tender', 'type'),
               tenderId: tenderId,
               createdAt: BuiltValueNullFieldError.checkNotNull(
-                  createdAt, 'Tender', 'createdAt'),
+                  createdAt, r'Tender', 'createdAt'),
               cardDetails: _cardDetails?.build(),
               cashDetails: _cashDetails?.build());
     } catch (_) {
@@ -1730,7 +1745,7 @@ class TenderBuilder implements Builder<Tender, TenderBuilder> {
         _cashDetails?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'Tender', _$failedField, e.toString());
+            r'Tender', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1746,15 +1761,15 @@ class _$CashDetails extends CashDetails {
   final Money changeBackMoney;
 
   factory _$CashDetails([void Function(CashDetailsBuilder)? updates]) =>
-      (new CashDetailsBuilder()..update(updates)).build();
+      (new CashDetailsBuilder()..update(updates))._build();
 
   _$CashDetails._(
       {required this.buyerTenderedMoney, required this.changeBackMoney})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        buyerTenderedMoney, 'CashDetails', 'buyerTenderedMoney');
+        buyerTenderedMoney, r'CashDetails', 'buyerTenderedMoney');
     BuiltValueNullFieldError.checkNotNull(
-        changeBackMoney, 'CashDetails', 'changeBackMoney');
+        changeBackMoney, r'CashDetails', 'changeBackMoney');
   }
 
   @override
@@ -1774,13 +1789,16 @@ class _$CashDetails extends CashDetails {
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc(0, buyerTenderedMoney.hashCode), changeBackMoney.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, buyerTenderedMoney.hashCode);
+    _$hash = $jc(_$hash, changeBackMoney.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CashDetails')
+    return (newBuiltValueToStringHelper(r'CashDetails')
           ..add('buyerTenderedMoney', buyerTenderedMoney)
           ..add('changeBackMoney', changeBackMoney))
         .toString();
@@ -1826,7 +1844,9 @@ class CashDetailsBuilder implements Builder<CashDetails, CashDetailsBuilder> {
   }
 
   @override
-  _$CashDetails build() {
+  CashDetails build() => _build();
+
+  _$CashDetails _build() {
     _$CashDetails _$result;
     try {
       _$result = _$v ??
@@ -1842,7 +1862,7 @@ class CashDetailsBuilder implements Builder<CashDetails, CashDetailsBuilder> {
         changeBackMoney.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CashDetails', _$failedField, e.toString());
+            r'CashDetails', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1858,12 +1878,12 @@ class _$CardDetails extends CardDetails {
   final Card card;
 
   factory _$CardDetails([void Function(CardDetailsBuilder)? updates]) =>
-      (new CardDetailsBuilder()..update(updates)).build();
+      (new CardDetailsBuilder()..update(updates))._build();
 
   _$CardDetails._({required this.entryMethod, required this.card}) : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        entryMethod, 'CardDetails', 'entryMethod');
-    BuiltValueNullFieldError.checkNotNull(card, 'CardDetails', 'card');
+        entryMethod, r'CardDetails', 'entryMethod');
+    BuiltValueNullFieldError.checkNotNull(card, r'CardDetails', 'card');
   }
 
   @override
@@ -1883,12 +1903,16 @@ class _$CardDetails extends CardDetails {
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, entryMethod.hashCode), card.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, entryMethod.hashCode);
+    _$hash = $jc(_$hash, card.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CardDetails')
+    return (newBuiltValueToStringHelper(r'CardDetails')
           ..add('entryMethod', entryMethod)
           ..add('card', card))
         .toString();
@@ -1931,13 +1955,15 @@ class CardDetailsBuilder implements Builder<CardDetails, CardDetailsBuilder> {
   }
 
   @override
-  _$CardDetails build() {
+  CardDetails build() => _build();
+
+  _$CardDetails _build() {
     _$CardDetails _$result;
     try {
       _$result = _$v ??
           new _$CardDetails._(
               entryMethod: BuiltValueNullFieldError.checkNotNull(
-                  entryMethod, 'CardDetails', 'entryMethod'),
+                  entryMethod, r'CardDetails', 'entryMethod'),
               card: card.build());
     } catch (_) {
       late String _$failedField;
@@ -1946,7 +1972,7 @@ class CardDetailsBuilder implements Builder<CardDetails, CardDetailsBuilder> {
         card.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CardDetails', _$failedField, e.toString());
+            r'CardDetails', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -1970,7 +1996,7 @@ class _$Card extends Card {
   final String? cardholderName;
 
   factory _$Card([void Function(CardBuilder)? updates]) =>
-      (new CardBuilder()..update(updates)).build();
+      (new CardBuilder()..update(updates))._build();
 
   _$Card._(
       {required this.brand,
@@ -1980,9 +2006,9 @@ class _$Card extends Card {
       this.id,
       this.cardholderName})
       : super._() {
-    BuiltValueNullFieldError.checkNotNull(brand, 'Card', 'brand');
+    BuiltValueNullFieldError.checkNotNull(brand, r'Card', 'brand');
     BuiltValueNullFieldError.checkNotNull(
-        lastFourDigits, 'Card', 'lastFourDigits');
+        lastFourDigits, r'Card', 'lastFourDigits');
   }
 
   @override
@@ -2006,19 +2032,20 @@ class _$Card extends Card {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc($jc($jc(0, brand.hashCode), lastFourDigits.hashCode),
-                    expirationMonth.hashCode),
-                expirationYear.hashCode),
-            id.hashCode),
-        cardholderName.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, brand.hashCode);
+    _$hash = $jc(_$hash, lastFourDigits.hashCode);
+    _$hash = $jc(_$hash, expirationMonth.hashCode);
+    _$hash = $jc(_$hash, expirationYear.hashCode);
+    _$hash = $jc(_$hash, id.hashCode);
+    _$hash = $jc(_$hash, cardholderName.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('Card')
+    return (newBuiltValueToStringHelper(r'Card')
           ..add('brand', brand)
           ..add('lastFourDigits', lastFourDigits)
           ..add('expirationMonth', expirationMonth)
@@ -2088,13 +2115,15 @@ class CardBuilder implements Builder<Card, CardBuilder> {
   }
 
   @override
-  _$Card build() {
+  Card build() => _build();
+
+  _$Card _build() {
     final _$result = _$v ??
         new _$Card._(
             brand:
-                BuiltValueNullFieldError.checkNotNull(brand, 'Card', 'brand'),
+                BuiltValueNullFieldError.checkNotNull(brand, r'Card', 'brand'),
             lastFourDigits: BuiltValueNullFieldError.checkNotNull(
-                lastFourDigits, 'Card', 'lastFourDigits'),
+                lastFourDigits, r'Card', 'lastFourDigits'),
             expirationMonth: expirationMonth,
             expirationYear: expirationYear,
             id: id,
@@ -2124,7 +2153,7 @@ class _$CheckoutParameters extends CheckoutParameters {
 
   factory _$CheckoutParameters(
           [void Function(CheckoutParametersBuilder)? updates]) =>
-      (new CheckoutParametersBuilder()..update(updates)).build();
+      (new CheckoutParametersBuilder()..update(updates))._build();
 
   _$CheckoutParameters._(
       {required this.amountMoney,
@@ -2137,7 +2166,7 @@ class _$CheckoutParameters extends CheckoutParameters {
       this.tipSettings})
       : super._() {
     BuiltValueNullFieldError.checkNotNull(
-        amountMoney, 'CheckoutParameters', 'amountMoney');
+        amountMoney, r'CheckoutParameters', 'amountMoney');
   }
 
   @override
@@ -2165,25 +2194,22 @@ class _$CheckoutParameters extends CheckoutParameters {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc(
-            $jc(
-                $jc(
-                    $jc(
-                        $jc(
-                            $jc($jc(0, amountMoney.hashCode),
-                                skipReceipt.hashCode),
-                            collectSignature.hashCode),
-                        allowSplitTender.hashCode),
-                    delayCapture.hashCode),
-                note.hashCode),
-            additionalPaymentTypes.hashCode),
-        tipSettings.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, amountMoney.hashCode);
+    _$hash = $jc(_$hash, skipReceipt.hashCode);
+    _$hash = $jc(_$hash, collectSignature.hashCode);
+    _$hash = $jc(_$hash, allowSplitTender.hashCode);
+    _$hash = $jc(_$hash, delayCapture.hashCode);
+    _$hash = $jc(_$hash, note.hashCode);
+    _$hash = $jc(_$hash, additionalPaymentTypes.hashCode);
+    _$hash = $jc(_$hash, tipSettings.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('CheckoutParameters')
+    return (newBuiltValueToStringHelper(r'CheckoutParameters')
           ..add('amountMoney', amountMoney)
           ..add('skipReceipt', skipReceipt)
           ..add('collectSignature', collectSignature)
@@ -2271,7 +2297,9 @@ class CheckoutParametersBuilder
   }
 
   @override
-  _$CheckoutParameters build() {
+  CheckoutParameters build() => _build();
+
+  _$CheckoutParameters _build() {
     _$CheckoutParameters _$result;
     try {
       _$result = _$v ??
@@ -2296,7 +2324,7 @@ class CheckoutParametersBuilder
         _tipSettings?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'CheckoutParameters', _$failedField, e.toString());
+            r'CheckoutParameters', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -2314,7 +2342,7 @@ class _$TipSettings extends TipSettings {
   final BuiltList<int>? tipPercentages;
 
   factory _$TipSettings([void Function(TipSettingsBuilder)? updates]) =>
-      (new TipSettingsBuilder()..update(updates)).build();
+      (new TipSettingsBuilder()..update(updates))._build();
 
   _$TipSettings._(
       {this.showCustomTipField,
@@ -2340,15 +2368,17 @@ class _$TipSettings extends TipSettings {
 
   @override
   int get hashCode {
-    return $jf($jc(
-        $jc($jc(0, showCustomTipField.hashCode),
-            showSeparateTipScreen.hashCode),
-        tipPercentages.hashCode));
+    var _$hash = 0;
+    _$hash = $jc(_$hash, showCustomTipField.hashCode);
+    _$hash = $jc(_$hash, showSeparateTipScreen.hashCode);
+    _$hash = $jc(_$hash, tipPercentages.hashCode);
+    _$hash = $jf(_$hash);
+    return _$hash;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('TipSettings')
+    return (newBuiltValueToStringHelper(r'TipSettings')
           ..add('showCustomTipField', showCustomTipField)
           ..add('showSeparateTipScreen', showSeparateTipScreen)
           ..add('tipPercentages', tipPercentages))
@@ -2400,7 +2430,9 @@ class TipSettingsBuilder implements Builder<TipSettings, TipSettingsBuilder> {
   }
 
   @override
-  _$TipSettings build() {
+  TipSettings build() => _build();
+
+  _$TipSettings _build() {
     _$TipSettings _$result;
     try {
       _$result = _$v ??
@@ -2415,7 +2447,7 @@ class TipSettingsBuilder implements Builder<TipSettings, TipSettingsBuilder> {
         _tipPercentages?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
-            'TipSettings', _$failedField, e.toString());
+            r'TipSettings', _$failedField, e.toString());
       }
       rethrow;
     }
@@ -2424,4 +2456,4 @@ class TipSettingsBuilder implements Builder<TipSettings, TipSettingsBuilder> {
   }
 }
 
-// ignore_for_file: always_put_control_body_on_new_line,always_specify_types,annotate_overrides,avoid_annotating_with_dynamic,avoid_as,avoid_catches_without_on_clauses,avoid_returning_this,lines_longer_than_80_chars,omit_local_variable_types,prefer_expression_function_bodies,sort_constructors_first,test_types_in_equals,unnecessary_const,unnecessary_new
+// ignore_for_file: deprecated_member_use_from_same_package,type=lint

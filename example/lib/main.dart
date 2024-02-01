@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/api_intregration/shared_prf.dart';
-import 'package:readersdk2_example/screen/add_authorise_screen.dart';
-import 'package:readersdk2_example/screen/add_card_reader_screen.dart';
-import 'package:readersdk2_example/screen/splash_screen.dart';
+import 'package:readersdk2_example/final_screen/splash_screen.dart';
 
 import 'const/global_variable.dart';
 

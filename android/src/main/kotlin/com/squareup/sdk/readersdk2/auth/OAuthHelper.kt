@@ -51,7 +51,7 @@ object OAuthHelper {
     /**
      * Returns application id for current environment or for Production if it is first app launch.
      */
-    fun getAppId(context: Context, currentEnvironmentName: String): String {
+    fun getAppId(context: Context, currentEnvironmentName: String): Environment? {
         Log.d("TAG", "getAppId: 5555 $currentEnvironmentName")
         val currentEnvironment = getAllEnvironments(context)
             .firstOrNull { it.name == currentEnvironmentName }
@@ -61,8 +61,11 @@ object OAuthHelper {
 
             Log.d("TAG", "getAppId: 5555 $currentEnvironment")
         }
-        Log.d("TAG", "getAppId: 62 $currentEnvironment")
-        return currentEnvironment.applicationId
+        Log.d("TAG", "getAppId: 67777 ${currentEnvironment.authToken}")
+        Log.d("TAG", "getAppId: 688888 ${currentEnvironment.locationId}")
+        Log.d("TAG", "getAppId: 699999 ${currentEnvironment.name}")
+        Log.d("TAG", "getAppId: 644444 ${currentEnvironment.viewId}")
+        return currentEnvironment
     }
 
     /**

@@ -29,7 +29,6 @@ class ChargeViewModel : ViewModel() {
     private var callbacks = mutableListOf<CallbackReference>()
     private var alertDialog: AlertDialog? = null
     private lateinit var context: Context
-    var paymentResults = ""
 
     fun getPaymentResult(): LiveData<PaymentResult> = paymentResult
 
@@ -56,33 +55,36 @@ class ChargeViewModel : ViewModel() {
         return paymentHandler!!.alternateMethods
     }
 
-    fun startPayment(parameters: PaymentParameters): String {
-        if (paymentInProgress) return ""
+    fun startPayment(parameters: PaymentParameters) {
+        if (paymentInProgress) return
+        paymentInProgress = true
         Log.d("TAG", "startPayment:  51 $paymentInProgress")
         paymentInProgress = true
         Log.d("TAG", "startPayment:  52 $paymentInProgress")
         paymentHandler = paymentManager.startPaymentActivity(parameters)
         Log.d("TAG", "startPayment:  53 $paymentHandler")
-        paymentManager.addPaymentCallback { result: PaymentResult ->
-            when (result) {
-                is Result.Success -> {
-                    //showChargeSuccessDialog(result.value)
-                    paymentResults = result.value.toString()
-                    Log.d("TAG", "startPayment: 71 -- ${result.value}")
-                    Log.d("TAG", "startPayment: 711 -- $paymentResults")
-                }
-                is Result.Failure -> {
-                    paymentResults = result.errorMessage
-                    Log.d("TAG", "startPayment: 74 -- ${result.errorMessage}")
-                    Log.d("TAG", "startPayment: 744 -- $paymentResults")
-                }
-            }
-
-            Log.d("TAG", "startPayment: -- $result")
-        }
-        Log.d("TAG", "startPayment: 103 - $paymentResults")
-        return paymentResults
+//        paymentManager.addPaymentCallback { result: PaymentResult ->
+//            when (result) {
+//                is Result.Success -> {
+//                    //showChargeSuccessDialog(result.value)
+//                    paymentResults = result.value.toString()
+//                    Log.d("TAG", "startPayment: 71 -- ${result.value}")
+//                    Log.d("TAG", "startPayment: 711 -- $paymentResults")
+//
+//                }
+//                is Result.Failure -> {
+//                    paymentResults = result.errorMessage
+//                    Log.d("TAG", "startPayment: 74 -- ${result.errorMessage}")
+//                    Log.d("TAG", "startPayment: 744 -- $paymentResults")
+//                }
+//            }
+//
+//            Log.d("TAG", "startPayment: -- ${result}")
+//        }
+        Log.d("TAG", "startPayment: 103 - ")
+        // return paymentResults
     }
+
     fun cancel() {
         if (!paymentInProgress) return
         paymentHandler?.cancel() // triggers callbacks, which close the fragment

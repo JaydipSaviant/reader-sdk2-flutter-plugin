@@ -37,4 +37,9 @@ class StaticString {
   static String authoriseWithOauth = "Authorise with oAuth";
   static String charges = "charge";
   static String tapMockReader = "Tap to MockReader";
+  static String locations = "Location";
+  static String locationId = "Location ID";
+  static String sdkVersion = "SDK Version";
+  static String environment = "Environment";
+  static String applicationID = "Application ID";
 }

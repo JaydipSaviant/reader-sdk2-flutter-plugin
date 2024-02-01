@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:readersdk2/model/models.dart';
 import 'package:readersdk2/readersdk2.dart';
-import 'package:readersdk2_example/screen/checkout_screen.dart';
+import 'package:readersdk2_example/final_screen/bottom_nav_screen.dart/checkout_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/dialog_modal.dart';
 import 'package:readersdk2_example/widgets/loading.dart';
@@ -22,11 +22,10 @@ class AuthorizeScreen extends StatefulWidget {
 class _AuthorizeScreenState extends State<AuthorizeScreen> {
   bool _isLoading = false;
 
- @override
+  @override
   void initState() {
     super.initState();
   }
-
 
   void authorizeQRCode(String authCode) async {
     try {
@@ -35,11 +34,11 @@ class _AuthorizeScreenState extends State<AuthorizeScreen> {
       });
       await Readersdk2.authorize(authCode);
       debugPrint("auth code authorised = ${Readersdk2.authorize(authCode)}");
-     Navigator.push(context, MaterialPageRoute(
-            builder: (context) {
-              return const CheckoutScreen();
-            },
-          ));
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return const CheckoutScreen();
+        },
+      ));
     } on ReaderSdk2Exception catch (e) {
       switch (e.code) {
         case ErrorCode.authorizeErrorNoNetwork:

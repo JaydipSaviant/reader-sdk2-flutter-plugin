@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.squareup.sdk.reader2.core.ErrorDetails
+import com.squareup.sdk.reader2.core.Result
+import com.squareup.sdk.reader2.extensions.PaymentResult
 import com.squareup.sdk.reader2.payment.CurrencyCode
 import com.squareup.sdk.reader2.payment.Money
 import com.squareup.sdk.reader2.payment.PaymentManager
@@ -26,12 +28,24 @@ class PaymentModule {
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
-    ): String {
+        //resultInvoke :((String)->Unit)
+    ) {
         if (checkoutParameters != null) {
             Log.d("Tageee", "checkoutParameters::$checkoutParameters , $result")
-            return startPayment(checkoutParameters, paymentManager, viewModel, contextReader)
+
+            startPayment(
+                checkoutParameters,
+                paymentManager,
+                viewModel,
+                contextReader,
+//                paymentRes = {
+//                    resultInvoke.invoke(it)
+//                    Log.d("TAG", "startCheckout: it result = $it")
+//                }
+            )
         } else {
-            return "INVALID_ARGUMENT"
+            return
+            //"INVALID_ARGUMENT"
         }
     }
 
@@ -40,7 +54,8 @@ class PaymentModule {
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
-    ): String {
+       // paymentRes: ((PaymentResult) -> Unit),
+    ) {
         context = contextReader
         // var paymentHandler: PaymentHandle? = null
         val checkoutParams: CheckoutParams? = checkoutParameters.toCheckoutParams()
@@ -58,52 +73,80 @@ class PaymentModule {
                 arguments?.getBoolean(KeypadFragment.PARAM_ACCEPT_PARTIAL) ?: false
             )
         }*/
-//    var tipAmount = 10
-//        if (tipAmount != null && tipAmount > 0) {
-//            builder.tipMoney(Money(tipAmount.toLong(), CurrencyCode.USD))
-//        }
-//        val feeAmount = checkoutParams.amountMoney.amount
-//        if (feeAmount != null && feeAmount > 0) {
-//            builder.appFeeMoney(Money(feeAmount.toLong(), CurrencyCode.USD))
-//        }
-//        val delayDuration = arguments?.getLong(KeypadFragment.PARAM_DELAY_DURATION)
-//        if (delayDuration != null && delayDuration > 0) {
-//            builder.delayDuration(delayDuration)
-//        }
-//    val orderId = UUID.randomUUID().toString()
-//    if (!orderId.isNullOrEmpty()) {
-//        builder.orderId(orderId)
-//    }
-//        val customerId = UUID.randomUUID().toString()
-//        if (!customerId.isNullOrEmpty()) {
-//            builder.customerId(customerId)
-//        }
-//        val teamMemberId = UUID.randomUUID().toString()
-//        if (!teamMemberId.isNullOrEmpty()) {
-//            builder.teamMemberId(teamMemberId)
-//        }
-//        val locationId = "LWTCANRWNHMF0"
-//        if (!locationId.isNullOrEmpty()) {
-//            builder.locationId(locationId)
-//        }
-//        val referenceId = UUID.randomUUID().toString()
-//        if (!referenceId.isNullOrEmpty()) {
-//            builder.referenceId(referenceId)
-//        }
-//    val note = "This is testing payment"/*arguments?.getString(KeypadFragment.PARAM_NOTE)*/
-//    if (!note.isNullOrEmpty()) {
-//        builder.note(note)
-//    }
-//        val statementDescription = "check"
-//        if (!statementDescription.isNullOrEmpty()) {
-//            builder.statementDescription(statementDescription)
-//        }
+  /*  var tipAmount = 10
+        if (tipAmount != null && tipAmount > 0) {
+            builder.tipMoney(Money(tipAmount.toLong(), CurrencyCode.USD))
+        }
+        val feeAmount = checkoutParams.amountMoney.amount
+        if (feeAmount != null && feeAmount > 0) {
+            builder.appFeeMoney(Money(feeAmount.toLong(), CurrencyCode.USD))
+        }
+        val delayDuration = arguments?.getLong(KeypadFragment.PARAM_DELAY_DURATION)
+        if (delayDuration != null && delayDuration > 0) {
+            builder.delayDuration(delayDuration)
+        }
+    val orderId = UUID.randomUUID().toString()
+    if (!orderId.isNullOrEmpty()) {
+        builder.orderId(orderId)
+    }
+        val customerId = UUID.randomUUID().toString()
+        if (!customerId.isNullOrEmpty()) {
+            builder.customerId(customerId)
+        }
+        val teamMemberId = UUID.randomUUID().toString()
+        if (!teamMemberId.isNullOrEmpty()) {
+            builder.teamMemberId(teamMemberId)
+        }
+        val locationId = "LWTCANRWNHMF0"
+        if (!locationId.isNullOrEmpty()) {
+            builder.locationId(locationId)
+        }
+        val referenceId = UUID.randomUUID().toString()
+        if (!referenceId.isNullOrEmpty()) {
+            builder.referenceId(referenceId)
+        }
+    val note = "This is testing payment"*//*arguments?.getString(KeypadFragment.PARAM_NOTE)*//*
+    if (!note.isNullOrEmpty()) {
+        builder.note(note)
+    }
+        val statementDescription = "check"
+        if (!statementDescription.isNullOrEmpty()) {
+            builder.statementDescription(statementDescription)
+        }*/
 
         val parameters = builder.build()
         Log.d("TAG", "startPayment:  116 9090  $parameters")
-        var resultStr = viewModel.startPayment(parameters)
-        Log.d("TAG", "startPayment: 102 - $resultStr")
-        return resultStr
+        viewModel.startPayment(parameters)
+        var paymentResults: String = ""
+
+        paymentManager.addPaymentCallback { result: PaymentResult ->
+            when (result) {
+                is Result.Success -> {
+                    //showChargeSuccessDialog(result.value)
+                    //paymentRes.invoke(result.value)
+                    paymentResults = result.value.toString()
+                    Log.d("TAG", "startPayment: 71 -- ${result.value.toString()}")
+                    Log.d("TAG", "startPayment: 711 -- $paymentResults")
+                    paymentResult(paymentResults)
+                }
+
+                is Result.Failure -> {
+                   // paymentRes.invoke(result)
+                    paymentResults = result.errorMessage
+                    Log.d("TAG", "startPayment: 74 -- ${result.errorMessage}")
+                    Log.d("TAG", "startPayment: 744 -- $paymentResults")
+                    paymentResult(paymentResults)
+                }
+            }
+
+            Log.d("TAG", "startPayment: -- ${result}")
+        }
+        Log.d("TAG", "startPayment: -- 123 ${paymentResults}")
+    }
+
+    fun paymentResult (result :String) : String{
+        var paymentRes: String =result
+        return paymentRes
     }
 
     private fun showChargeSuccessDialog(paymentResult: Payment) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:group_list_view/group_list_view.dart';
 import 'package:readersdk2_example/const/static_string.dart';
-import 'package:readersdk2_example/screen/checkout_screen.dart';
+import 'package:readersdk2_example/final_screen/bottom_nav_screen.dart/checkout_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/network_button.dart';
 

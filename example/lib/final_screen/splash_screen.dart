@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/api_intregration/shared_prf.dart';
 import 'package:readersdk2_example/const/global_variable.dart';
-import 'package:readersdk2_example/screen/add_authorise_screen.dart';
-import 'package:readersdk2_example/screen/add_card_reader_screen.dart';
+import 'package:readersdk2_example/final_screen/add_authorise_screen.dart';
+import 'package:readersdk2_example/final_screen/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,14 +19,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   getAuth() async {
     isCompletedAuth = await SharedPref().getBool("isCompleteAuthorized");
+    if (isCompletedAuth == true) {
+      Readersdk2.directAuthorised;
+    }
     Timer(
-        Duration(seconds: 5),
-        () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => isCompletedAuth
-                    ? const AddCardReaderScreen()
-                    : const AddAuthorisedScreen())));
+          Duration(seconds: 5),
+          () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => isCompletedAuth
+                      ? const HomePage()
+                      : const AddAuthorisedScreen())));
   }
 
   void initState() {

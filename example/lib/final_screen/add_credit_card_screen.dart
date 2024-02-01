@@ -5,11 +5,15 @@ import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:intl/intl.dart';
+
+
 
 const _debug = !bool.fromEnvironment("dart.vm.product");
 
 class AddCreditCardScreen extends StatefulWidget {
-  const AddCreditCardScreen({super.key});
+  final String input;
+  const AddCreditCardScreen({super.key, required this.input});
 
   @override
   State<AddCreditCardScreen> createState() => _AddCreditCardScreenState();
@@ -93,7 +97,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                               if (formKey.currentState!.validate()) {
                                 var builder = CheckoutParametersBuilder();
                                 builder.amountMoney = MoneyBuilder()
-                                  ..amount = 100
+                                  ..amount = int.parse(widget.input)
                                   ..currencyCode =
                                       'USD'; // currencyCode is optional
                                 // Optional for all following configuration
@@ -155,7 +159,7 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
             ],
           ),
         )
-        //   body:  
+        //   body:
         // InkWell(
         //   splashColor: Colors.transparent,
         //   onTap: () {
@@ -337,6 +341,45 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
         //   ),
         // ),
         );
+  }
+   _showTransactionDialog(CheckoutResult checkoutResult) {
+    // amount is in cents
+    debugPrint("total money = ${checkoutResult.totalMoney.currencyCode}");
+    debugPrint("total money =1212 -- ${checkoutResult.totalMoney.amount}");
+    var formattedAmount = NumberFormat.simpleCurrency(
+            name: checkoutResult.totalMoney.currencyCode)
+        .format(checkoutResult.totalMoney.amount / 100);
+
+    showDialog(
+        context: context,
+        builder: (var context) => AlertDialog(
+              title: Text(
+                '$formattedAmount Successfully Charged',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(
+                      'See the debugger console for transaction details. You can refund transactions from your Square Dashboard.',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
   }
 
   void onCreditCardModelChange(CreditCardModel creditCardModel) {
