@@ -7,8 +7,6 @@ import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:intl/intl.dart';
 
-
-
 const _debug = !bool.fromEnvironment("dart.vm.product");
 
 class AddCreditCardScreen extends StatefulWidget {
@@ -121,8 +119,15 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                                 try {
                                   var checkoutResult =
                                       await Readersdk2.startCheckout(
-                                          checkoutParameters);
-                                  print("102 line --- $checkoutResult");
+                                              checkoutParameters)
+                                          .then((value) async {
+                                    debugPrint("valueeeeeee = $value");
+                                    await Readersdk2.paymentResult;
+                                    debugPrint(
+                                        "paymentttt == ${Readersdk2.paymentResult}");
+                                  });
+                                  debugPrint("102 line --- $checkoutResult");
+
                                   //_showTransactionDialog(checkoutResult);
                                 } on ReaderSdk2Exception catch (e) {
                                   debugPrint("payment cancel = $e");
@@ -342,7 +347,8 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
         // ),
         );
   }
-   _showTransactionDialog(CheckoutResult checkoutResult) {
+
+  _showTransactionDialog(CheckoutResult checkoutResult) {
     // amount is in cents
     debugPrint("total money = ${checkoutResult.totalMoney.currencyCode}");
     debugPrint("total money =1212 -- ${checkoutResult.totalMoney.amount}");

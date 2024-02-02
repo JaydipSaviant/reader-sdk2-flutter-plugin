@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import com.squareup.sdk.reader2.core.ErrorDetails
 import com.squareup.sdk.reader2.core.Result
 import com.squareup.sdk.reader2.extensions.PaymentResult
+import com.squareup.sdk.reader2.payment.Card
+import com.squareup.sdk.reader2.payment.CashDetails
 import com.squareup.sdk.reader2.payment.CurrencyCode
 import com.squareup.sdk.reader2.payment.Money
 import com.squareup.sdk.reader2.payment.PaymentManager
@@ -28,24 +30,12 @@ class PaymentModule {
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
-        //resultInvoke :((String)->Unit)
-    ) {
+    ) : String {
         if (checkoutParameters != null) {
             Log.d("Tageee", "checkoutParameters::$checkoutParameters , $result")
-
-            startPayment(
-                checkoutParameters,
-                paymentManager,
-                viewModel,
-                contextReader,
-//                paymentRes = {
-//                    resultInvoke.invoke(it)
-//                    Log.d("TAG", "startCheckout: it result = $it")
-//                }
-            )
+            return startPayment(checkoutParameters, paymentManager, viewModel, contextReader)
         } else {
-            return
-            //"INVALID_ARGUMENT"
+            return "INVALID_ARGUMENT"
         }
     }
 
@@ -54,10 +44,8 @@ class PaymentModule {
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
-       // paymentRes: ((PaymentResult) -> Unit),
-    ) {
+    ):String {
         context = contextReader
-        // var paymentHandler: PaymentHandle? = null
         val checkoutParams: CheckoutParams? = checkoutParameters.toCheckoutParams()
 
 
@@ -73,39 +61,39 @@ class PaymentModule {
                 arguments?.getBoolean(KeypadFragment.PARAM_ACCEPT_PARTIAL) ?: false
             )
         }*/
-  /*  var tipAmount = 10
-        if (tipAmount != null && tipAmount > 0) {
-            builder.tipMoney(Money(tipAmount.toLong(), CurrencyCode.USD))
-        }
-        val feeAmount = checkoutParams.amountMoney.amount
-        if (feeAmount != null && feeAmount > 0) {
-            builder.appFeeMoney(Money(feeAmount.toLong(), CurrencyCode.USD))
-        }
-        val delayDuration = arguments?.getLong(KeypadFragment.PARAM_DELAY_DURATION)
-        if (delayDuration != null && delayDuration > 0) {
-            builder.delayDuration(delayDuration)
-        }
-    val orderId = UUID.randomUUID().toString()
-    if (!orderId.isNullOrEmpty()) {
-        builder.orderId(orderId)
-    }
-        val customerId = UUID.randomUUID().toString()
-        if (!customerId.isNullOrEmpty()) {
-            builder.customerId(customerId)
-        }
-        val teamMemberId = UUID.randomUUID().toString()
-        if (!teamMemberId.isNullOrEmpty()) {
-            builder.teamMemberId(teamMemberId)
-        }
-        val locationId = "LWTCANRWNHMF0"
-        if (!locationId.isNullOrEmpty()) {
-            builder.locationId(locationId)
-        }
-        val referenceId = UUID.randomUUID().toString()
-        if (!referenceId.isNullOrEmpty()) {
-            builder.referenceId(referenceId)
-        }
-    val note = "This is testing payment"*//*arguments?.getString(KeypadFragment.PARAM_NOTE)*//*
+        /*  var tipAmount = 10
+              if (tipAmount != null && tipAmount > 0) {
+                  builder.tipMoney(Money(tipAmount.toLong(), CurrencyCode.USD))
+              }
+              val feeAmount = checkoutParams.amountMoney.amount
+              if (feeAmount != null && feeAmount > 0) {
+                  builder.appFeeMoney(Money(feeAmount.toLong(), CurrencyCode.USD))
+              }
+              val delayDuration = arguments?.getLong(KeypadFragment.PARAM_DELAY_DURATION)
+              if (delayDuration != null && delayDuration > 0) {
+                  builder.delayDuration(delayDuration)
+              }
+          val orderId = UUID.randomUUID().toString()
+          if (!orderId.isNullOrEmpty()) {
+              builder.orderId(orderId)
+          }
+              val customerId = UUID.randomUUID().toString()
+              if (!customerId.isNullOrEmpty()) {
+                  builder.customerId(customerId)
+              }
+              val teamMemberId = UUID.randomUUID().toString()
+              if (!teamMemberId.isNullOrEmpty()) {
+                  builder.teamMemberId(teamMemberId)
+              }
+              val locationId = "LWTCANRWNHMF0"
+              if (!locationId.isNullOrEmpty()) {
+                  builder.locationId(locationId)
+              }
+              val referenceId = UUID.randomUUID().toString()
+              if (!referenceId.isNullOrEmpty()) {
+                  builder.referenceId(referenceId)
+              }
+          val note = "This is testing payment"*//*arguments?.getString(KeypadFragment.PARAM_NOTE)*//*
     if (!note.isNullOrEmpty()) {
         builder.note(note)
     }
@@ -119,44 +107,34 @@ class PaymentModule {
         viewModel.startPayment(parameters)
         var paymentResults: String = ""
 
-        paymentManager.addPaymentCallback { result: PaymentResult ->
-            when (result) {
+        paymentManager.addPaymentCallback { paymentResult: PaymentResult ->
+            when (paymentResult) {
                 is Result.Success -> {
-                    //showChargeSuccessDialog(result.value)
-                    //paymentRes.invoke(result.value)
-                    paymentResults = result.value.toString()
-                    Log.d("TAG", "startPayment: 71 -- ${result.value.toString()}")
-                    Log.d("TAG", "startPayment: 711 -- $paymentResults")
-                    paymentResult(paymentResults)
+                    paymentResults = paymentResult.value.toString()
+                    GlobleSingleTon.paymentResult = paymentResult.value
+                    Log.d("TAG", "startPayment: 71 -- ${paymentResult.value}")
+                    Log.d("TAG", "startPayment: 711 -- ${GlobleSingleTon.paymentResult}")
                 }
-
                 is Result.Failure -> {
-                   // paymentRes.invoke(result)
-                    paymentResults = result.errorMessage
-                    Log.d("TAG", "startPayment: 74 -- ${result.errorMessage}")
-                    Log.d("TAG", "startPayment: 744 -- $paymentResults")
-                    paymentResult(paymentResults)
+                    paymentResults = paymentResult.errorMessage
+                    GlobleSingleTon.paymentFailure = paymentResult.errorMessage
+                    Log.d("TAG", "startPayment: 74 -- ${paymentResult.errorMessage}")
+                    Log.d("TAG", "startPayment: 744 -- ${GlobleSingleTon.paymentResult}")
                 }
             }
-
-            Log.d("TAG", "startPayment: -- ${result}")
         }
-        Log.d("TAG", "startPayment: -- 123 ${paymentResults}")
+        return  paymentResults
     }
 
-    fun paymentResult (result :String) : String{
-        var paymentRes: String =result
-        return paymentRes
-    }
-
-    private fun showChargeSuccessDialog(paymentResult: Payment) {
-        Log.d("TAG", "showChargeSuccessDialog: payment = $paymentResult")
-        showSimpleMessageDialog(
-            title = "Success", message = Html.fromHtml(
-                (paymentResult as Payment.OnlinePayment).toHtml(),
+        private fun showChargeSuccessDialog(paymentResult: Payment) {
+            Log.d("TAG", "showChargeSuccessDialog: payment = $paymentResult")
+            showSimpleMessageDialog(
+                title = "Success", message = Html.fromHtml(
+                    (paymentResult as Payment.OnlinePayment).toHtml(),
+                )
             )
-        )
-    }
+        }
+
 
     private fun showChargeFailureDialog(errorMessage: String, details: List<ErrorDetails>) =
         showSimpleMessageDialog(
@@ -187,6 +165,67 @@ class PaymentModule {
             setTextIsSelectable(true)
         }
     }
+    fun convertOnlinePaymentToMap(onlinePayment: Payment): Map<String, Any> {
+        val paymentMap = mutableMapOf<String, Any>()
+
+        paymentMap["id"] = onlinePayment.id
+        paymentMap["createdAt"] = onlinePayment.createdAt
+        paymentMap["updatedAt"] = onlinePayment.updatedAt
+        paymentMap["amountMoney"] = convertMoneyToMap(onlinePayment.amountMoney)
+        paymentMap["tipMoney"] = convertMoneyToMap(onlinePayment.tipMoney!!)
+        // Add other fields as needed
+        // Convert cardDetails to a Map
+        paymentMap["cashDetails"] = convertCashDetailsToMap(onlinePayment.cashDetails)
+      //  paymentMap["cardDetails"] = convertCardToMap(onlinePayment.)
+        Log.d("TAG", "convertOnlinePaymentToMap: $paymentMap")
+        return paymentMap
+    }
+
+    fun convertMoneyToMap(money: Money): Map<String, Any> {
+        val moneyMap = mutableMapOf<String, Any>()
+
+        moneyMap["amount"] = money.amount
+        moneyMap["currency"] = money.currencyCode
+
+        return moneyMap
+    }
+
+    fun convertCashDetailsToMap(cashDetails: CashDetails?): Map<String, Any> {
+        val cardDetailsMap = mutableMapOf<String, Any>()
+
+        if (cashDetails != null) {
+            cardDetailsMap["buyerSuppliedMoney"] = cashDetails.buyerSuppliedMoney
+            cardDetailsMap["changeBackMoney"] = cashDetails.changeBackMoney
+        }
+    //    cardDetailsMap["card"] = convertCardToMap(cashDetails)
+
+        return cardDetailsMap
+    }
+//    fun convertCardDetailsToMap(cardPaymentDetails: CardPaymentDetails.OnlineCardPaymentDetails): Map<String, Any> {
+//        val cardDetailsMap = mutableMapOf<String, Any>()
+//
+//        if (cashDetails != null) {
+//            cardDetailsMap["buyerSuppliedMoney"] = cashDetails.buyerSuppliedMoney
+//            cardDetailsMap["changeBackMoney"] = cashDetails.changeBackMoney
+//        }
+//        cardDetailsMap["card"] = convertCardToMap(cashDetails)
+//
+//        return cardDetailsMap
+//    }
+    fun convertCardToMap(card: Card): Map<String, Any> {
+        val cardMap = mutableMapOf<String, Any>()
+
+        cardMap["brand"] = card.brand
+        cardMap["lastFourDigits"] = card.lastFourDigits
+        cardMap["cardCoBrand"] = card.cardCoBrand
+        cardMap["expirationMonth"] = card.expirationMonth
+        cardMap["expirationYear"] = card.expirationYear
+        cardMap["cardholderName"] = card.cardholderName!!
+        cardMap["id"] = card.id!!
+        // Add other fields as needed
+
+        return cardMap
+    }
 }
 
 fun HashMap<String, Any>?.toCheckoutParams(): CheckoutParams? {
@@ -213,6 +252,7 @@ fun HashMap<String, Any>?.toCheckoutParams(): CheckoutParams? {
             } ?: emptyList()
         )
     }
+
 }
 
 
@@ -237,3 +277,5 @@ data class AmountMoney(
     val amount: Int,
     val currencyCode: String,
 )
+
+

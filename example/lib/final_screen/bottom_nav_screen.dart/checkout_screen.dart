@@ -17,6 +17,7 @@ limitations under the License.
 */
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:readersdk2/model/models.dart';
 import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
@@ -40,6 +41,44 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final TextEditingController textEditingController = TextEditingController();
   bool _isLoading = false;
+
+  _showTransactionDialog(CheckoutResult checkoutResult) {
+    // amount is in cents
+    var formattedAmount = NumberFormat.simpleCurrency(
+            name: checkoutResult.totalMoney.currencyCode)
+        .format(checkoutResult.totalMoney.amount / 100);
+
+    showDialog(
+        context: context,
+        builder: (var context) => AlertDialog(
+              title: Text(
+                '$formattedAmount Successfully Charged',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: <Widget>[
+                    Text(
+                      'See the debugger console for transaction details. You can refund transactions from your Square Dashboard.',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ));
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -95,8 +134,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               var checkoutResult =
                                   await Readersdk2.startCheckout(
                                       checkoutParameters);
-                              print("102 line --- $checkoutResult");
-                              //_showTransactionDialog(checkoutResult);
+                              await Readersdk2.paymentResult;
+                              debugPrint(
+                                  "paymentttt == ${Readersdk2.paymentResult}");
+
+                              //         .then((value) {
+                              //   debugPrint(
+                              //       "value payment == $value");
+                              // })
+                              //  ;
+
+                              // _showTransactionDialog(checkoutResult);
                             } on ReaderSdk2Exception catch (e) {
                               debugPrint("payment cancel = $e");
                               switch (e.code) {
@@ -118,11 +166,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   }
                               }
                             }
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) =>
-                            //             AddCardReaderScreen()));
                           },
                         ),
                       ]),

@@ -56,6 +56,10 @@ abstract class CheckoutResult
   CheckoutResult._();
   factory CheckoutResult([updates(CheckoutResultBuilder b) /*!*/]) =
       _$CheckoutResult;
+//         // Use the generated deserialization function
+//  static CheckoutResult fromJson(Map<String, dynamic> json) =>
+//     _$CheckoutResultFromJson(json);
+
   static Serializer<CheckoutResult> get serializer =>
       _$checkoutResultSerializer;
 }

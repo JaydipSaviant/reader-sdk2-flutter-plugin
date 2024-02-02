@@ -83,18 +83,25 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             "startCheckout" -> {
                 val checkoutParams: HashMap<String, Any>? = call.argument("checkoutParams")
-                paymentModule.startCheckout(
-                    checkoutParams, result, paymentManager!!, viewModel!!, contextReader,
-//                    resultInvoke = {
-//                        Log.d("TAG", "startCheckout: it result 1= $it")
-//                        result.success(it)
-//                    }
-                )
-                Log.d("TAG", "onMethodCall--->: $checkoutParams")
+//               val startCheckOut =  paymentModule.startCheckout(
+             //       checkoutParams, result, paymentManager!!, viewModel!!, contextReader,
+                var resultPayment = paymentModule.startCheckout(
+                    checkoutParams, result, paymentManager!!, viewModel!!, contextReader  )
+                result.success(resultPayment)
+              //  result.success(paymentCheckout)
             }
 
             "paymentSuccess" -> {
-                //paymentModule.paymentResult()
+                Log.d("TAG", "onMethodCall: payment failure 1== ${GlobleSingleTon.paymentFailure}")
+                Log.d("TAG", "onMethodCall: payment failure 2== ${GlobleSingleTon.paymentResult}")
+
+                if(GlobleSingleTon.paymentFailure != "") {
+                    Log.d("TAG", "onMethodCall: payment failure == ${GlobleSingleTon.paymentFailure}")
+                    return result.success(GlobleSingleTon.paymentFailure)
+                } else {
+                    Log.d("TAG", "onMethodCall: payment successssss == ${GlobleSingleTon.paymentResult}")
+                    return result.success(GlobleSingleTon.paymentResult)
+                }
             }
 
             "directMockReaderUI" -> {

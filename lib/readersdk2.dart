@@ -70,22 +70,52 @@ class Readersdk2 {
     }
   }
 
-  static Future<String> startCheckout(CheckoutParameters checkoutParams) async {
+  // static Future<CheckoutResult> startCheckout(
+  //     CheckoutParameters checkoutParams) async {
+  //   try {
+  //     var params = <String, dynamic>{
+  //       'checkoutParams': _standardSerializers.serializeWith(
+  //           CheckoutParameters.serializer, checkoutParams),
+  //     };
+  //     debugPrint('Result from native parameter payment : $params');
+  //     var checkoutResultNativeObject =
+  //         await channel.invokeMethod('startCheckout', params);
+  //     debugPrint(
+  //         'Result from native parameter checkoutResultNativeObject : $checkoutResultNativeObject');
+
+  //     return checkoutResultNativeObject;
+  //   } on PlatformException catch (ex) {
+  //     throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
+  //         ex.details['debugMessage']);
+  //   }
+  // }
+
+  static Future<String> startCheckout(
+      CheckoutParameters checkoutParams) async {
     try {
       var params = <String, dynamic>{
         'checkoutParams': _standardSerializers.serializeWith(
             CheckoutParameters.serializer, checkoutParams),
       };
+      debugPrint('Sending parameters to native: $params');
       var checkoutResultNativeObject =
           await channel.invokeMethod('startCheckout', params);
-      debugPrint('Result from native parameter payment : $params');
-      debugPrint(
-          'Result from native parameter checkoutResultNativeObject : $checkoutResultNativeObject');
 
-      return checkoutResultNativeObject;
+      debugPrint(
+          'Received result from native object: $checkoutResultNativeObject');
+      // Assuming CheckoutResult is your custom result class
+      if (checkoutResultNativeObject != null) {
+        return checkoutResultNativeObject;
+      } else {
+        throw Exception('Received null result from native');
+      }
     } on PlatformException catch (ex) {
-      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
-          ex.details['debugMessage']);
+      throw ReaderSdk2Exception(
+        ex.code,
+        ex.message,
+        ex.details['debugCode'],
+        ex.details['debugMessage'],
+      );
     }
   }
 
@@ -94,6 +124,18 @@ class Readersdk2 {
       var directAuth = await channel.invokeMethod('directMockReaderUI');
       debugPrint("directAuth = $directAuth");
       return directAuth;
+    } on PlatformException catch (ex) {
+      throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
+          ex.details['debugMessage']);
+    }
+  }
+
+  static Future<void> get paymentResult async {
+    debugPrint("paymentSuccess = 12345");
+    try {
+      var paymentRes = await channel.invokeMethod('paymentSuccess');
+      debugPrint("paymentSuccess = $paymentRes");
+      return paymentRes;
     } on PlatformException catch (ex) {
       throw ReaderSdk2Exception(ex.code, ex.message, ex.details['debugCode'],
           ex.details['debugMessage']);
