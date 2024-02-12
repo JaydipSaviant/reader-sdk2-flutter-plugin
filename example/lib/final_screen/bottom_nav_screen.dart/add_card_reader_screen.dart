@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:readersdk2/readersdk2.dart';
+import 'package:readersdk2_example/const/global_variable.dart';
 import 'package:readersdk2_example/const/static_string.dart';
 import 'package:readersdk2_example/screen/charge_started_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
@@ -18,13 +19,6 @@ class _AddCardReaderScreenState extends State<AddCardReaderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      // floatingActionButton: NetworkButton(
-      //   onTap: () async {
-      //     debugPrint("authorizationInit ui button click");
-      //     await Readersdk2.mockReaderUI;
-      //   },
-      // ),
       body: Column(
         children: [NumericKeyboard()],
       ),
@@ -109,7 +103,7 @@ class _NumericKeyboardState extends State<NumericKeyboard> {
           ],
         ),
         SizedBox(
-          height: 60,
+          height: 50,
         ),
         Padding(
           padding: const EdgeInsets.only(top: 20),

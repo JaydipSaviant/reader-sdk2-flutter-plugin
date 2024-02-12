@@ -66,7 +66,7 @@ Future<Null> displayModal(BuildContext context, String message, void onPress) =>
                 TextButton(
                   child: Text('Confirm'),
                   onPressed: () {
-                    print('Confirmed');
+                    debugPrint('Confirmed');
                     Navigator.of(context).pop();
                     onPress;
                   },

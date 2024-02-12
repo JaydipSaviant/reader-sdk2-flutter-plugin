@@ -77,7 +77,6 @@ class ChargeFragment : Fragment(R.layout.charge_fragment) {
         savedInstanceState: Bundle?,
     ): View? {
         viewModel = ViewModelProvider(this)[ChargeViewModel::class.java]
-        Log.d("TAG", "FlutterOnCreate2: uiuiui${viewModel}")
         // Handle result of the payment: success or failure
         viewModel.getPaymentResult().observe(
             viewLifecycleOwner
@@ -87,7 +86,6 @@ class ChargeFragment : Fragment(R.layout.charge_fragment) {
             when (result) {
                 is Result.Success -> showChargeSuccessDialog(result.value)
                 is Result.Failure -> {
-                    Log.e("TAG", "Payment error! $result")
                     showChargeFailureDialog(result.errorMessage, result.details)
                 }
             }
@@ -363,21 +361,15 @@ class ChargeFragment : Fragment(R.layout.charge_fragment) {
     }
 
     fun startPayment() {
-        Log.d("Tageee", "checkoutParameters 666:: ,")
-
         if (!isAdded) {
             Log.w("Tageee", "Fragment is not added to its activity. Cannot start payment.")
             return
         }
 
-        Log.d("Tageee", "checkoutParameters 1:: ,")
 
          if (viewModel.paymentInProgress) return
-        Log.d("Tageee", "checkoutParameters 222:: ,")
         val autoComplete: Boolean =
             arguments?.getBoolean(KeypadFragment.PARAM_AUTOCOMPLETE) ?: false
-         Log.d("Tageee", "checkoutParameters start payment:: , $autoComplete")
-
          val idempotencyKey = arguments?.getString(KeypadFragment.IDEMPOTENCY_KEY)
         val builder = PaymentParameters.Builder(
             amount = Money(baseAmount, CurrencyCode.USD),
@@ -439,8 +431,6 @@ class ChargeFragment : Fragment(R.layout.charge_fragment) {
         }
 
         val parameters = builder.build()
-        Log.i("demo-app", "Starting payment with parameters=$parameters")
-
         viewModel.startPayment(parameters)
     }
 

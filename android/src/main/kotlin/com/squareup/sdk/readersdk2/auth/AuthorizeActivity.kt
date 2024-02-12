@@ -117,7 +117,6 @@ class AuthorizeActivity : AppCompatActivity() {
     }
 
     fun authorizeWithOauth(context: Context) {
-        Log.d(TAG, "authorizeWithOauth: 164")
         currentEnvironment = Environment(
             4,
             "Sandbox",
@@ -130,20 +129,15 @@ class AuthorizeActivity : AppCompatActivity() {
     }
 
     fun authorizeWithPAT(authorizationMan: AuthorizationManager) {
-        Log.d(TAG, "authorizeWithPAT: ")
         authorizationMan.authorize(
             "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW", "LBBSYN1QKHJSY"
         )
-        Log.d(TAG, "authorizeWithPAT: 12 -- ${authorizationMan.authorizationState.isAuthorized}")
-
 //        authorizationMan.authorize(currentEnvironment.authToken, currentEnvironment.locationId)
     }
 
     fun onAuthorizeResult(result: AuthorizeResult, context: Context) {
-        Log.d(TAG, "onAuthorizeResult: 141 $result ")
         when (result) {
             is Success -> {
-                Log.d(TAG, "onAuthorizeResult: 0000000 == ${result.value}")
                 finishWithAuthorizedResult(context)
             }
 
@@ -193,11 +187,9 @@ class AuthorizeActivity : AppCompatActivity() {
     }
 
     fun finishWithAuthorizedResult(context: Context) {
-        Log.d(TAG, "finishWithAuthorizedResult: 198888")
         // Show MockReader UI if we're in Sandbox and logged in
         if (ReaderSdk.isSandboxEnvironment()) {
             MockReaderUI.show()
-            Log.d(TAG, "finishWithAuthorizedResult: 1988888989898989")
         }
 
 //        val intent = Intent(context, MainActivity::class.java)

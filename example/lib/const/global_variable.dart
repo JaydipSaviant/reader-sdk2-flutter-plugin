@@ -8,4 +8,5 @@ class GlobalSingleton {
   GlobalSingleton.internal();
 
   bool isCompleteAuthorized = false;
+  var onlinePayment;
 }

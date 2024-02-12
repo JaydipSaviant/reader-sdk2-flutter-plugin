@@ -165,8 +165,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
         GlobalSingleton().isCompleteAuthorized = true;
         SharedPref().saveBool(
             "isCompleteAuthorized", GlobalSingleton().isCompleteAuthorized);
-        debugPrint("per completed = ${GlobalSingleton().isCompleteAuthorized}");
-        debugPrint("permission was granted");
       });
     }
   }

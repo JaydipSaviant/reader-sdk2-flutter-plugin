@@ -33,7 +33,6 @@ class _AuthorizeScreenState extends State<AuthorizeScreen> {
         _isLoading = true;
       });
       await Readersdk2.authorize(authCode);
-      debugPrint("auth code authorised = ${Readersdk2.authorize(authCode)}");
       Navigator.push(context, MaterialPageRoute(
         builder: (context) {
           return const CheckoutScreen();
@@ -48,7 +47,7 @@ class _AuthorizeScreenState extends State<AuthorizeScreen> {
           var errorMessage = e.message!;
           if (_debug) {
             errorMessage += '\n\nDebug Message: ${e.debugMessage}';
-            print('${e.code}:${e.debugCode}:${e.debugMessage}');
+            debugPrint('${e.code}:${e.debugCode}:${e.debugMessage}');
           }
           displayErrorModal(context, errorMessage);
           break;
@@ -91,7 +90,6 @@ class _AuthorizeScreenState extends State<AuthorizeScreen> {
     try {
       var result = await BarcodeScanner.scan();
       authorizeQRCode(result.rawContent);
-      debugPrint("authorise qr code == ${result.rawContent}");
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.cameraAccessDenied) {
         displayErrorModal(context, 'Camera Access was not granted');

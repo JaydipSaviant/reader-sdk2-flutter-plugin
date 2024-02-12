@@ -66,13 +66,8 @@ class AuthorizeModule {
     }
 
     fun authorize(authCode: String, flutterResult: MethodChannel.Result) {
-        Log.d("TAG", "authorize: authcode = $authCode")
-        authorizeCallbackRef = ReaderSdk.authorizationManager().addAuthorizeCallback {
-            Log.d("TAG", "authorize: authorized callback ref it 12 = $it")
-          //  authorizeActivity.onAuthorizeResult(it)
-        }
+        authorizeCallbackRef = ReaderSdk.authorizationManager().addAuthorizeCallback {}
         mainLooperHandler.post {
-            Log.d("TAG", "authorize: mainLooper ")
             ReaderSdk.authorizationManager().authorize(
                 "EAAAFNbbmssq_Adi_nZhJXZ1n5Sg0So5eBeYLxAvJ0pfvMX1A_OFtlwxPti1T3xW", "LBBSYN1QKHJSY"
             )
@@ -91,11 +86,6 @@ class AuthorizeModule {
             authorizeActivity.useOAuth -> authorizeActivity.authorizeWithOauth(context)
             else -> authorizeActivity.authorizeWithPAT(authorizationManager!!)
         }
-//        if (isValue){
-//            Log.d("TAG", "currentEnvironment: MockReaderUI 1 = $isValue ")
-//            MockReaderUI.show()
-//            Log.d("TAG", "currentEnvironment: MockReaderUI 121 ")
-//        }
         return isValue
     }
 }

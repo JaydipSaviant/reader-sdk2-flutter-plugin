@@ -10,6 +10,7 @@ import com.squareup.sdk.reader2.core.ErrorDetails
 import com.squareup.sdk.reader2.core.Result
 import com.squareup.sdk.reader2.extensions.PaymentResult
 import com.squareup.sdk.reader2.payment.Card
+import com.squareup.sdk.reader2.payment.CardPaymentDetails
 import com.squareup.sdk.reader2.payment.CashDetails
 import com.squareup.sdk.reader2.payment.CurrencyCode
 import com.squareup.sdk.reader2.payment.Money
@@ -20,42 +21,48 @@ import io.flutter.plugin.common.MethodChannel
 import java.util.UUID
 import com.squareup.sdk.reader2.payment.Payment
 import com.squareup.sdk.readersdk2.payment.toHtml
+import io.flutter.embedding.engine.FlutterEngine
 
 class PaymentModule {
 
+    private lateinit var flutterEngine: FlutterEngine
     private lateinit var context: Context
+
+    private val CHANNELFLUTTER = "readerSDKFlutter"
+    private lateinit var methodChannelFlutter: MethodChannel
     fun startCheckout(
         checkoutParameters: HashMap<String, Any>?,
         result: MethodChannel.Result,
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
+        channel: MethodChannel
     ) : String {
         if (checkoutParameters != null) {
-            Log.d("Tageee", "checkoutParameters::$checkoutParameters , $result")
-            return startPayment(checkoutParameters, paymentManager, viewModel, contextReader)
+            return startPayment(checkoutParameters, paymentManager, viewModel, contextReader, channel)
         } else {
             return "INVALID_ARGUMENT"
         }
     }
 
+    fun setFlutterEngine(flutterEngine: FlutterEngine) {
+        this.flutterEngine = flutterEngine
+    }
     private fun startPayment(
         checkoutParameters: HashMap<String, Any>?,
         paymentManager: PaymentManager,
         viewModel: ChargeViewModel,
         contextReader: Context,
+        channel: MethodChannel
     ):String {
         context = contextReader
         val checkoutParams: CheckoutParams? = checkoutParameters.toCheckoutParams()
 
 
-        Log.d("TAG", "Actual payment start   62 $checkoutParams")
         val builder = PaymentParameters.Builder(
             amount = Money(checkoutParams?.amountMoney?.amount!!.toLong(), CurrencyCode.USD),
             idempotencyKey = UUID.randomUUID().toString(),
         ).autocomplete(true)
-        Log.d("TAG", "startPayment: builder = $builder")
-        Log.d("TAG", "startPayment: builder 11 = ${checkoutParams.amountMoney.amount}")
         /*if (!autoComplete) {
             builder.acceptPartialAuthorization(
                 arguments?.getBoolean(KeypadFragment.PARAM_ACCEPT_PARTIAL) ?: false
@@ -103,23 +110,26 @@ class PaymentModule {
         }*/
 
         val parameters = builder.build()
-        Log.d("TAG", "startPayment:  116 9090  $parameters")
         viewModel.startPayment(parameters)
         var paymentResults: String = ""
+
+         flutterEngine =  FlutterEngine(context);
+
+         setFlutterEngine(flutterEngine)
+
+        methodChannelFlutter = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "readersdk2")
+
 
         paymentManager.addPaymentCallback { paymentResult: PaymentResult ->
             when (paymentResult) {
                 is Result.Success -> {
                     paymentResults = paymentResult.value.toString()
                     GlobleSingleTon.paymentResult = paymentResult.value
-                    Log.d("TAG", "startPayment: 71 -- ${paymentResult.value}")
-                    Log.d("TAG", "startPayment: 711 -- ${GlobleSingleTon.paymentResult}")
+                    channel.invokeMethod("sendDataToFlutter", paymentResults)
                 }
                 is Result.Failure -> {
                     paymentResults = paymentResult.errorMessage
                     GlobleSingleTon.paymentFailure = paymentResult.errorMessage
-                    Log.d("TAG", "startPayment: 74 -- ${paymentResult.errorMessage}")
-                    Log.d("TAG", "startPayment: 744 -- ${GlobleSingleTon.paymentResult}")
                 }
             }
         }
@@ -127,11 +137,10 @@ class PaymentModule {
     }
 
         private fun showChargeSuccessDialog(paymentResult: Payment) {
-            Log.d("TAG", "showChargeSuccessDialog: payment = $paymentResult")
             showSimpleMessageDialog(
                 title = "Success", message = Html.fromHtml(
                     (paymentResult as Payment.OnlinePayment).toHtml(),
-                )
+                ), context
             )
         }
 
@@ -150,14 +159,16 @@ class PaymentModule {
                             "(${it.field}"
                         }
                     })
-            )
+            ),
+            context
         )
 
     private fun showSimpleMessageDialog(
         title: String,
         message: CharSequence,
+        contextReader: Context
     ) {
-        val dialog = AlertDialog.Builder(context).setTitle(title).setMessage(message)
+        val dialog = AlertDialog.Builder(contextReader).setTitle(title).setMessage(message)
             .setPositiveButton(android.R.string.ok, null).show()
 
         // Make the text inside the dialog selectable so one can copy it
@@ -176,12 +187,10 @@ class PaymentModule {
         // Add other fields as needed
         // Convert cardDetails to a Map
         paymentMap["cashDetails"] = convertCashDetailsToMap(onlinePayment.cashDetails)
-      //  paymentMap["cardDetails"] = convertCardToMap(onlinePayment.)
-        Log.d("TAG", "convertOnlinePaymentToMap: $paymentMap")
         return paymentMap
     }
 
-    fun convertMoneyToMap(money: Money): Map<String, Any> {
+    private fun convertMoneyToMap(money: Money): Map<String, Any> {
         val moneyMap = mutableMapOf<String, Any>()
 
         moneyMap["amount"] = money.amount
@@ -190,7 +199,7 @@ class PaymentModule {
         return moneyMap
     }
 
-    fun convertCashDetailsToMap(cashDetails: CashDetails?): Map<String, Any> {
+    private fun convertCashDetailsToMap(cashDetails: CashDetails?): Map<String, Any> {
         val cardDetailsMap = mutableMapOf<String, Any>()
 
         if (cashDetails != null) {
@@ -201,17 +210,18 @@ class PaymentModule {
 
         return cardDetailsMap
     }
-//    fun convertCardDetailsToMap(cardPaymentDetails: CardPaymentDetails.OnlineCardPaymentDetails): Map<String, Any> {
-//        val cardDetailsMap = mutableMapOf<String, Any>()
-//
-//        if (cashDetails != null) {
-//            cardDetailsMap["buyerSuppliedMoney"] = cashDetails.buyerSuppliedMoney
-//            cardDetailsMap["changeBackMoney"] = cashDetails.changeBackMoney
-//        }
-//        cardDetailsMap["card"] = convertCardToMap(cashDetails)
-//
-//        return cardDetailsMap
-//    }
+    fun convertCardDetailsToMap(cardPaymentDetails: CardPaymentDetails.OnlineCardPaymentDetails): Map<String, Any> {
+        val cardDetailsMap = mutableMapOf<String, Any>()
+
+        if (cardPaymentDetails != null) {
+            cardDetailsMap["status"] = cardPaymentDetails.status
+            cardDetailsMap["entryMethod"] = cardPaymentDetails.entryMethod
+            cardDetailsMap["accountType"] = cardPaymentDetails.accountType!!
+        }
+        cardDetailsMap["card"] = convertCardToMap(cardPaymentDetails.card)
+
+        return cardDetailsMap
+    }
     fun convertCardToMap(card: Card): Map<String, Any> {
         val cardMap = mutableMapOf<String, Any>()
 

@@ -8,8 +8,9 @@ import com.squareup.sdk.reader2.ReaderSdk
 import com.squareup.sdk.reader2.mockreader.ui.MockReaderUI
 import com.squareup.sdk.reader2.payment.PaymentManager
 import com.squareup.sdk.readersdk2.auth.AuthorizeActivity
-import com.squareup.sdk.readersdk2.auth.OAuthHelper
 import com.squareup.sdk.readersdk2.payment.ChargeViewModel
+import io.flutter.embedding.android.KeyData.CHANNEL
+import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -28,7 +29,7 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     lateinit var authorisedModule: AuthorizeModule
     private var paymentModule: PaymentModule = PaymentModule()
     private var viewModel: ChargeViewModel? = null
-      lateinit var contextReader: Context
+    lateinit var contextReader: Context
 
     private var isAuthorize = false
     private var appIds: String = ""
@@ -42,6 +43,11 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var authorizeActivity = AuthorizeActivity()
 
     private var sharedPreference = SharedPreference()
+    private var flutterEngine: FlutterEngine? = null
+
+    fun setFlutterEngine(engine: FlutterEngine) {
+        flutterEngine = engine
+    }
 
     override fun onMethodCall(call: MethodCall, @NonNull result: Result) {
         when (call.method) {
@@ -83,32 +89,15 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             "startCheckout" -> {
                 val checkoutParams: HashMap<String, Any>? = call.argument("checkoutParams")
-//               val startCheckOut =  paymentModule.startCheckout(
-             //       checkoutParams, result, paymentManager!!, viewModel!!, contextReader,
-                var resultPayment = paymentModule.startCheckout(
-                    checkoutParams, result, paymentManager!!, viewModel!!, contextReader  )
-                result.success(resultPayment)
-              //  result.success(paymentCheckout)
-            }
-
-            "paymentSuccess" -> {
-                Log.d("TAG", "onMethodCall: payment failure 1== ${GlobleSingleTon.paymentFailure}")
-                Log.d("TAG", "onMethodCall: payment failure 2== ${GlobleSingleTon.paymentResult}")
-
-                if(GlobleSingleTon.paymentFailure != "") {
-                    Log.d("TAG", "onMethodCall: payment failure == ${GlobleSingleTon.paymentFailure}")
-                    return result.success(GlobleSingleTon.paymentFailure)
-                } else {
-                    Log.d("TAG", "onMethodCall: payment successssss == ${GlobleSingleTon.paymentResult}")
-                    return result.success(GlobleSingleTon.paymentResult)
-                }
+                //var resultPayment =
+                    paymentModule.startCheckout(
+                    checkoutParams, result, paymentManager!!, viewModel!!, contextReader, channel
+                )
             }
 
             "directMockReaderUI" -> {
-                ReaderSdk.authorizationManager().deauthorize()
-                Log.d("TAG", "isAuthorized: deauthorized")
+               // ReaderSdk.authorizationManager().deauthorize()
 //                MockReaderUI.hide()
-//                Log.d("TAG", "isAuthorized: deauthorized UHUDHUHDU")
                 var getCurrentEnv = sharedPreference.getData(currentActivity!!.applicationContext)
                 if (getCurrentEnv != null) {
                     println("myVariable is not null: $getCurrentEnv")
@@ -123,11 +112,9 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             else -> {
                 result.notImplemented()
-                Log.d("TAG", "FlutterOnCreate: else part run")
             }
         }
     }
-
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         //onAttachedToEngine(flutterPluginBinding.applicationContext, flutterPluginBinding.binaryMessenger)
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "readersdk2")
@@ -138,26 +125,17 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         channel.setMethodCallHandler(null)
     }
 
-
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         setContextForModules(binding.activity)
     }
 
     fun setAuth(currentAccessToken: String, currentLocationId: String) {
         mockReaderUIShow(currentAccessToken, currentLocationId)
-        Log.d("TAG", "authorize: authorized callback ref it 123254235235235")
-//        ReaderSdk.authorizationManager().addAuthorizeCallback {
-//            Log.d("TAG", "authorize: authorized callback ref it 12 = $it")
-//            authorizeActivity.onAuthorizeResult(it)
-//        }
     }
 
-    fun setContextForModules(activity: Activity) {
+    private fun setContextForModules(activity: Activity) {
         currentActivity = activity
-        Log.d("TAG", "world 125:--> $currentActivity")
-        //authorizationInit(currentActivity!!.applicationContext)
     }
-
 
     override fun onDetachedFromActivityForConfigChanges() {}
 
@@ -173,11 +151,11 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         currentLocationId: String,
     ) {
         contextReader = context
-//        this.currentAccessToken = OAuthHelper.getAppId(context, currentAuthentication)!!.authToken
-//        this.currentLocationId = OAuthHelper.getAppId(context, currentAuthentication)!!.locationId
-//        currentAuthentication = OAuthHelper.getAppId(context, currentAuthentication)!!.name
-//        appIds = OAuthHelper.getAppId(context, currentAuthentication)!!.applicationId
-
+        /* this.currentAccessToken = OAuthHelper.getAppId(context, currentAuthentication)!!.authToken
+         this.currentLocationId = OAuthHelper.getAppId(context, currentAuthentication)!!.locationId
+         currentAuthentication = OAuthHelper.getAppId(context, currentAuthentication)!!.name
+         appIds = OAuthHelper.getAppId(context, currentAuthentication)!!.applicationId
+ */
         ReaderSdk.initialize("sandbox-sq0idb-7QT2EriOdn1Gz8jw7e2KSw", currentActivity!!.application)
         authorisedModule = AuthorizeModule()
         if (::authorisedModule.isInitialized) {
@@ -189,29 +167,18 @@ class Readersdk2Plugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         paymentManager = ReaderSdk.paymentManager()
         viewModel = ChargeViewModel()
         isAuthorize = authorisedModule.isAuthorized(currentAccessToken, currentLocationId)
-        Log.d("TAG", "authorizationInit: 1 = $isAuthorize")
 
         authorisedModule.authorizationManager!!.addAuthorizeCallback {
             authorizeActivity.onAuthorizeResult(it, context)
-            Log.d("TAG", "authorizationInit: 17000000  ${it}")
             MockReaderUI.show()
         }
-
-
     }
 
     private fun mockReaderUIShow(currentAccessToken: String, currentLocationId: String) {
-        Log.d("TAG", "isAuthorized: second 45 = $currentAccessToken")
-        Log.d("TAG", "isAuthorized: second 34 = $currentLocationId")
-//        ReaderSdk.authorizationManager().deauthorize()
-//        Log.d("TAG", "isAuthorized: second 1090910910")
-//        MockReaderUI.hide()
         if (!authorisedModule.isAuthorized(currentAccessToken, currentLocationId)) {
-            Log.d("TAG", "isAuthorized: second 999 =")
             ReaderSdk.authorizationManager().authorize(
                 currentAccessToken, currentLocationId
             )
-            Log.d("TAG", "isAuthorized: second 9876 =")
         }
         if (ReaderSdk.isSandboxEnvironment()) {
             MockReaderUI.show()

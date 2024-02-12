@@ -1,31 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_element, prefer_final_fields
-
-/*
-Copyright 2022 Square Inc.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:readersdk2/model/models.dart';
 import 'package:readersdk2/readersdk2.dart';
 import 'package:readersdk2_example/const/static_string.dart';
-import 'package:readersdk2_example/final_screen/bottom_nav_screen.dart/add_card_reader_screen.dart';
-import 'package:readersdk2_example/screen/charge_started_screen.dart';
 import 'package:readersdk2_example/widgets/buttons.dart';
 import 'package:readersdk2_example/widgets/loading.dart';
-import 'package:readersdk2_example/widgets/network_button.dart';
 import 'package:built_collection/built_collection.dart';
 
 const _debug = !bool.fromEnvironment("dart.vm.product");
@@ -42,42 +20,45 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final TextEditingController textEditingController = TextEditingController();
   bool _isLoading = false;
 
-  _showTransactionDialog(CheckoutResult checkoutResult) {
+  _showTransactionDialog() {
     // amount is in cents
-    var formattedAmount = NumberFormat.simpleCurrency(
-            name: checkoutResult.totalMoney.currencyCode)
-        .format(checkoutResult.totalMoney.amount / 100);
+    // var formattedAmount = NumberFormat.simpleCurrency(
+    //         name: checkoutResult.totalMoney.currencyCode)
+    //     .format(checkoutResult.totalMoney.amount / 100);
 
-    showDialog(
-        context: context,
-        builder: (var context) => AlertDialog(
-              title: Text(
-                '$formattedAmount Successfully Charged',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    Text(
-                      'See the debugger console for transaction details. You can refund transactions from your Square Dashboard.',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(
+            'Successfully Charged',
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  'See the debugger console for transaction details. You can refund transactions from your Square Dashboard.',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
               ],
-            ));
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -98,7 +79,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         body: _isLoading
             ? LoadingWidget()
             : Container(
-                margin: EdgeInsets.only(top: 30.0),
+                margin: const EdgeInsets.only(top: 30.0),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -134,23 +115,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               var checkoutResult =
                                   await Readersdk2.startCheckout(
                                       checkoutParameters);
-                              await Readersdk2.paymentResult;
-                              debugPrint(
-                                  "paymentttt == ${Readersdk2.paymentResult}");
-
-                              //         .then((value) {
-                              //   debugPrint(
-                              //       "value payment == $value");
-                              // })
-                              //  ;
-
-                              // _showTransactionDialog(checkoutResult);
+                              _showTransactionDialog();
                             } on ReaderSdk2Exception catch (e) {
                               debugPrint("payment cancel = $e");
                               switch (e.code) {
                                 case ErrorCode.checkoutErrorCanceled:
                                   // Handle canceled transaction here
-                                  print('transaction canceled.');
+                                  debugPrint('transaction canceled.');
                                   break;
                                 case ErrorCode.checkoutErrorSdkNotAuthorized:
                                   // Handle sdk not authorized
@@ -161,7 +132,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   if (_debug) {
                                     errorMessage +=
                                         '\n\nDebug Message: ${e.debugMessage}';
-                                    print(
+                                    debugPrint(
                                         '${e.code}:${e.debugCode}:${e.debugMessage}');
                                   }
                               }

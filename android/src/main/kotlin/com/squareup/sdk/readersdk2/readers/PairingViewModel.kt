@@ -22,21 +22,17 @@ class PairingViewModel : ViewModel() {
     fun startPairing() {
         if (readerManager.isPairingInProgress) {
             // Pairing has already started
-            Log.d(TAG, "Pairing is already in progress")
             return
         }
 
         pairingCallbackReference = readerManager.addPairingCallback {
-            Log.d(TAG, "Pairing result received: $it. Propagating to observer...")
             pairingResult.postValue(it)
         }
 
-        Log.d(TAG, "Starting pairing...")
         pairingHandle = readerManager.pairReader()
     }
 
     override fun onCleared() {
-        Log.d(TAG, "onCleared() called")
 
         if (readerManager.isPairingInProgress) {
             val stopResult = pairingHandle.stop()

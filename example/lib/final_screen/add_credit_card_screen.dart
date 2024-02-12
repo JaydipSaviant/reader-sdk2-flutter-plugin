@@ -119,22 +119,13 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
                                 try {
                                   var checkoutResult =
                                       await Readersdk2.startCheckout(
-                                              checkoutParameters)
-                                          .then((value) async {
-                                    debugPrint("valueeeeeee = $value");
-                                    await Readersdk2.paymentResult;
-                                    debugPrint(
-                                        "paymentttt == ${Readersdk2.paymentResult}");
-                                  });
-                                  debugPrint("102 line --- $checkoutResult");
-
-                                  //_showTransactionDialog(checkoutResult);
+                                          checkoutParameters);
+                                  _showTransactionDialog();
                                 } on ReaderSdk2Exception catch (e) {
-                                  debugPrint("payment cancel = $e");
                                   switch (e.code) {
                                     case ErrorCode.checkoutErrorCanceled:
                                       // Handle canceled transaction here
-                                      print('transaction canceled.');
+                                      debugPrint('transaction canceled.');
                                       break;
                                     case ErrorCode
                                           .checkoutErrorSdkNotAuthorized:
@@ -163,204 +154,15 @@ class _AddCreditCardScreenState extends State<AddCreditCardScreen> {
               ),
             ],
           ),
-        )
-        //   body:
-        // InkWell(
-        //   splashColor: Colors.transparent,
-        //   onTap: () {
-        //     FocusManager.instance.primaryFocus?.unfocus();
-        //   },
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.center,
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     children: [
-        //       Padding(
-        //         padding: const EdgeInsets.symmetric(horizontal: 15),
-        //         child: TextFormField(
-        //           controller: cardNumberController,
-        //           cursorColor: Colors.white,
-        //           inputFormatters: [
-        //             FilteringTextInputFormatter.digitsOnly,
-        //             CardNumberFormatter(),
-        //           ],
-        //           textInputAction: TextInputAction.done,
-        //           keyboardType: TextInputType.number,
-        //           obscureText: !cardNumber,
-        //           decoration: InputDecoration(
-        //             prefixIcon: Padding(
-        //               padding: const EdgeInsets.all(8.0),
-        //               child: Image.network(
-        //                 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/800px-Mastercard-logo.svg.png',
-        //                 height: 30,
-        //                 width: 30,
-        //               ),
-        //             ),
-        //             suffixIcon: Padding(
-        //                 padding: const EdgeInsets.all(8.0),
-        //                 child: IconButton(
-        //                   onPressed: () {
-        //                     setState(() {
-        //                       cardNumber = !cardNumber;
-        //                     });
-        //                   },
-        //                   icon: const Icon(Icons.lock),
-        //                   color: Colors.white,
-        //                 )),
-        //             enabledBorder: OutlineInputBorder(
-        //               borderRadius: BorderRadius.all(Radius.circular(4)),
-        //               borderSide: BorderSide(width: 2, color: Colors.white38),
-        //             ),
-        //             focusedBorder: OutlineInputBorder(
-        //               borderRadius: BorderRadius.all(Radius.circular(4)),
-        //               borderSide: BorderSide(width: 1, color: Colors.white),
-        //             ),
-        //             hintText: 'XXXX XXXX XXXX XXXX',
-        //             labelText: 'Card Number',
-        //           ),
-        //           maxLength: 19,
-        //           onChanged: (value) {},
-        //         ),
-        //       ),
-        //       Container(
-        //         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-        //         child: Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             Flexible(
-        //               child: TextFormField(
-        //                 controller: dateController,
-        //                 cursorColor: Colors.white,
-        //                 inputFormatters: [
-        //                   FilteringTextInputFormatter.digitsOnly,
-        //                   DateFormatter(),
-        //                 ],
-        //                 textInputAction: TextInputAction.next,
-        //                 keyboardType: TextInputType.datetime,
-        //                 decoration: const InputDecoration(
-        //                     enabledBorder: OutlineInputBorder(
-        //                       borderRadius: BorderRadius.all(Radius.circular(4)),
-        //                       borderSide:
-        //                           BorderSide(width: 2, color: Colors.white38),
-        //                     ),
-        //                     focusedBorder: OutlineInputBorder(
-        //                       borderRadius: BorderRadius.all(Radius.circular(4)),
-        //                       borderSide:
-        //                           BorderSide(width: 1, color: Colors.white),
-        //                     ),
-        //                     hintText: 'Card Expiry',
-        //                     labelText: 'MM/YY'),
-        //                 maxLength: 5,
-        //               ),
-        //             ),
-        //             const SizedBox(width: 20),
-        //             Flexible(
-        //               child: TextFormField(
-        //                 controller: cvvController,
-        //                 cursorColor: Colors.white,
-        //                 textInputAction: TextInputAction.next,
-        //                 keyboardType: TextInputType.number,
-        //                 obscureText: true,
-        //                 decoration: const InputDecoration(
-        //                   enabledBorder: OutlineInputBorder(
-        //                     borderRadius: BorderRadius.all(Radius.circular(4)),
-        //                     borderSide:
-        //                         BorderSide(width: 2, color: Colors.white38),
-        //                   ),
-        //                   focusedBorder: OutlineInputBorder(
-        //                     borderRadius: BorderRadius.all(Radius.circular(4)),
-        //                     borderSide: BorderSide(width: 1, color: Colors.white),
-        //                   ),
-        //                   labelText: 'CVV',
-        //                   hintText: 'CVV Number',
-        //                 ),
-        //                 maxLength: 3,
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       ),
-        //       SQButtonContainer(buttons: [
-        //         SQRaisedButton(
-        //           text: StaticString.pay,
-        //           onPressed: () async {
-        //             if (cardNumberController.text.isNotEmpty &&
-        //                 dateController.text.isNotEmpty &&
-        //                 cvvController.text.isNotEmpty) {
-        //               var builder = CheckoutParametersBuilder();
-        //               builder.amountMoney = MoneyBuilder()
-        //                 ..amount = 100
-        //                 ..currencyCode = 'USD'; // currencyCode is optional
-        //               // Optional for all following configuration
-        //               builder.skipReceipt = false;
-        //               builder.collectSignature = true;
-        //               builder.allowSplitTender = false;
-        //               builder.delayCapture = false;
-        //               builder.note = 'Hello 💳 💰 World!';
-        //               builder.additionalPaymentTypes = ListBuilder([
-        //                 AdditionalPaymentType.cash,
-        //                 AdditionalPaymentType.manualCardEntry,
-        //                 AdditionalPaymentType.other
-        //               ]);
-        //               builder.tipSettings = TipSettingsBuilder()
-        //                 ..showCustomTipField = true
-        //                 ..showSeparateTipScreen = false
-        //                 ..tipPercentages = ListBuilder([15, 20, 30]);
-
-        //               CheckoutParameters checkoutParameters = builder.build();
-        //               try {
-        //                 var checkoutResult =
-        //                     await Readersdk2.startCheckout(checkoutParameters);
-        //                 print("102 line --- $checkoutResult");
-        //                 //_showTransactionDialog(checkoutResult);
-        //               } on ReaderSdk2Exception catch (e) {
-        //                 debugPrint("payment cancel = $e");
-        //                 switch (e.code) {
-        //                   case ErrorCode.checkoutErrorCanceled:
-        //                     // Handle canceled transaction here
-        //                     print('transaction canceled.');
-        //                     break;
-        //                   case ErrorCode.checkoutErrorSdkNotAuthorized:
-        //                     // Handle sdk not authorized
-        //                     Navigator.pushReplacementNamed(context, '/');
-        //                     break;
-        //                   default:
-        //                     var errorMessage = e.message!;
-        //                     if (_debug) {
-        //                       errorMessage +=
-        //                           '\n\nDebug Message: ${e.debugMessage}';
-        //                       print('${e.code}:${e.debugCode}:${e.debugMessage}');
-        //                     }
-        //                   // displayErrorModal(context, errorMessage);
-        //                 }
-        //               }
-        //               // Navigator.push(
-        //               //     context,
-        //               //     MaterialPageRoute(
-        //               //       builder: (context) => const AddCardScreen(),
-        //               //     ));
-        //             }
-        //           },
-        //         ),
-        //       ]),
-        //     ],
-        //   ),
-        // ),
-        );
+        ));
   }
 
-  _showTransactionDialog(CheckoutResult checkoutResult) {
-    // amount is in cents
-    debugPrint("total money = ${checkoutResult.totalMoney.currencyCode}");
-    debugPrint("total money =1212 -- ${checkoutResult.totalMoney.amount}");
-    var formattedAmount = NumberFormat.simpleCurrency(
-            name: checkoutResult.totalMoney.currencyCode)
-        .format(checkoutResult.totalMoney.amount / 100);
-
-    showDialog(
+  _showTransactionDialog() {
+    return showDialog(
         context: context,
         builder: (var context) => AlertDialog(
               title: Text(
-                '$formattedAmount Successfully Charged',
+                'Successfully Charged',
                 style: TextStyle(
                   color: Colors.black,
                 ),
